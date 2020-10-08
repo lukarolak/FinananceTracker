@@ -542,7 +542,7 @@ public:
         ValueType* v = &root;
         for (const Token *t = tokens_; t != tokens_ + tokenCount_; ++t) {
             switch (v->GetType()) {
-            case kObjectType:
+            case Type::kObjectType:
                 {
                     typename ValueType::MemberIterator m = v->FindMember(GenericValue<EncodingType>(GenericStringRef<Ch>(t->name, t->length)));
                     if (m == v->MemberEnd())
@@ -550,7 +550,7 @@ public:
                     v = &m->value;
                 }
                 continue;
-            case kArrayType:
+            case Type::kArrayType:
                 if (t->index == kPointerInvalidIndex || t->index >= v->Size())
                     break;
                 v = &((*v)[t->index]);
@@ -778,7 +778,7 @@ public:
         const Token* last = tokens_ + (tokenCount_ - 1);
         for (const Token *t = tokens_; t != last; ++t) {
             switch (v->GetType()) {
-            case kObjectType:
+            case Type::kObjectType:
                 {
                     typename ValueType::MemberIterator m = v->FindMember(GenericValue<EncodingType>(GenericStringRef<Ch>(t->name, t->length)));
                     if (m == v->MemberEnd())
@@ -786,7 +786,7 @@ public:
                     v = &m->value;
                 }
                 break;
-            case kArrayType:
+            case Type::kArrayType:
                 if (t->index == kPointerInvalidIndex || t->index >= v->Size())
                     return false;
                 v = &((*v)[t->index]);
@@ -797,9 +797,9 @@ public:
         }
 
         switch (v->GetType()) {
-        case kObjectType:
+        case Type::kObjectType:
             return v->EraseMember(GenericStringRef<Ch>(last->name, last->length));
-        case kArrayType:
+        case Type::kArrayType:
             if (last->index == kPointerInvalidIndex || last->index >= v->Size())
                 return false;
             v->Erase(v->Begin() + last->index);

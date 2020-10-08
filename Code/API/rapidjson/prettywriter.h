@@ -92,25 +92,25 @@ public:
     */
     //@{
 
-    bool Null()                 { PrettyPrefix(kNullType);   return Base::EndValue(Base::WriteNull()); }
-    bool Bool(bool b)           { PrettyPrefix(b ? kTrueType : kFalseType); return Base::EndValue(Base::WriteBool(b)); }
-    bool Int(int i)             { PrettyPrefix(kNumberType); return Base::EndValue(Base::WriteInt(i)); }
-    bool Uint(unsigned u)       { PrettyPrefix(kNumberType); return Base::EndValue(Base::WriteUint(u)); }
-    bool Int64(int64_t i64)     { PrettyPrefix(kNumberType); return Base::EndValue(Base::WriteInt64(i64)); }
-    bool Uint64(uint64_t u64)   { PrettyPrefix(kNumberType); return Base::EndValue(Base::WriteUint64(u64));  }
-    bool Double(double d)       { PrettyPrefix(kNumberType); return Base::EndValue(Base::WriteDouble(d)); }
+    bool Null()                 { PrettyPrefix(Type::kNullType);   return Base::EndValue(Base::WriteNull()); }
+    bool Bool(bool b)           { PrettyPrefix(b ? Type::kTrueType : Type::kFalseType); return Base::EndValue(Base::WriteBool(b)); }
+    bool Int(int i)             { PrettyPrefix(Type::kNumberType); return Base::EndValue(Base::WriteInt(i)); }
+    bool Uint(unsigned u)       { PrettyPrefix(Type::kNumberType); return Base::EndValue(Base::WriteUint(u)); }
+    bool Int64(int64_t i64)     { PrettyPrefix(Type::kNumberType); return Base::EndValue(Base::WriteInt64(i64)); }
+    bool Uint64(uint64_t u64)   { PrettyPrefix(Type::kNumberType); return Base::EndValue(Base::WriteUint64(u64));  }
+    bool Double(double d)       { PrettyPrefix(Type::kNumberType); return Base::EndValue(Base::WriteDouble(d)); }
 
     bool RawNumber(const Ch* str, SizeType length, bool copy = false) {
         RAPIDJSON_ASSERT(str != 0);
         (void)copy;
-        PrettyPrefix(kNumberType);
+        PrettyPrefix(Type::kNumberType);
         return Base::EndValue(Base::WriteString(str, length));
     }
 
     bool String(const Ch* str, SizeType length, bool copy = false) {
         RAPIDJSON_ASSERT(str != 0);
         (void)copy;
-        PrettyPrefix(kStringType);
+        PrettyPrefix(Type::kStringType);
         return Base::EndValue(Base::WriteString(str, length));
     }
 
@@ -121,7 +121,7 @@ public:
 #endif
 
     bool StartObject() {
-        PrettyPrefix(kObjectType);
+        PrettyPrefix(Type::kObjectType);
         new (Base::level_stack_.template Push<typename Base::Level>()) typename Base::Level(false);
         return Base::WriteStartObject();
     }
@@ -155,7 +155,7 @@ public:
     }
 
     bool StartArray() {
-        PrettyPrefix(kArrayType);
+        PrettyPrefix(Type::kArrayType);
         new (Base::level_stack_.template Push<typename Base::Level>()) typename Base::Level(true);
         return Base::WriteStartArray();
     }
@@ -240,7 +240,7 @@ protected:
                     WriteIndent();
             }
             if (!level->inArray && level->valueCount % 2 == 0)
-                RAPIDJSON_ASSERT(type == kStringType);  // if it's in object, then even number should be a name
+                RAPIDJSON_ASSERT(type == Type::kStringType);  // if it's in object, then even number should be a name
             level->valueCount++;
         }
         else {

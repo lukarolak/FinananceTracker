@@ -223,8 +223,8 @@ public:
 
     Hasher(Allocator* allocator = 0, size_t stackCapacity = kDefaultSize) : stack_(allocator, stackCapacity) {}
 
-    bool Null() { return WriteType(kNullType); }
-    bool Bool(bool b) { return WriteType(b ? kTrueType : kFalseType); }
+    bool Null() { return WriteType(Type::kNullType); }
+    bool Bool(bool b) { return WriteType(b ? Type::kTrueType : Type::kFalseType); }
     bool Int(int i) { Number n; n.u.i = i; n.d = static_cast<double>(i); return WriteNumber(n); }
     bool Uint(unsigned u) { Number n; n.u.u = u; n.d = static_cast<double>(u); return WriteNumber(n); }
     bool Int64(int64_t i) { Number n; n.u.i = i; n.d = static_cast<double>(i); return WriteNumber(n); }
@@ -238,19 +238,19 @@ public:
     }
 
     bool RawNumber(const Ch* str, SizeType len, bool) {
-        WriteBuffer(kNumberType, str, len * sizeof(Ch));
+        WriteBuffer(Type::kNumberType, str, len * sizeof(Ch));
         return true;
     }
 
     bool String(const Ch* str, SizeType len, bool) {
-        WriteBuffer(kStringType, str, len * sizeof(Ch));
+        WriteBuffer(Type::kStringType, str, len * sizeof(Ch));
         return true;
     }
 
     bool StartObject() { return true; }
     bool Key(const Ch* str, SizeType len, bool copy) { return String(str, len, copy); }
     bool EndObject(SizeType memberCount) { 
-        uint64_t h = Hash(0, kObjectType);
+        uint64_t h = Hash(0, Type::kObjectType);
         uint64_t* kv = stack_.template Pop<uint64_t>(memberCount * 2);
         for (SizeType i = 0; i < memberCount; i++)
             h ^= Hash(kv[i * 2], kv[i * 2 + 1]);  // Use xor to achieve member order insensitive
@@ -260,7 +260,7 @@ public:
     
     bool StartArray() { return true; }
     bool EndArray(SizeType elementCount) { 
-        uint64_t h = Hash(0, kArrayType);
+        uint64_t h = Hash(0, Type::kArrayType);
         uint64_t* e = stack_.template Pop<uint64_t>(elementCount);
         for (SizeType i = 0; i < elementCount; i++)
             h = Hash(h, e[i]); // Use hash to achieve element order sensitive
@@ -287,7 +287,7 @@ private:
 
     bool WriteType(Type type) { return WriteBuffer(type, 0, 0); }
     
-    bool WriteNumber(const Number& n) { return WriteBuffer(kNumberType, &n, sizeof(n)); }
+    bool WriteNumber(const Number& n) { return WriteBuffer(Type::kNumberType, &n, sizeof(n)); }
     
     bool WriteBuffer(Type type, const void* data, size_t len) {
         // FNV-1a from http://isthe.com/chongo/tech/comp/fnv/
@@ -490,7 +490,7 @@ public:
         const ValueType* dependencies = GetMember(value, GetDependenciesString());
         {
             // Gather properties from properties/required/dependencies
-            SValue allProperties(kArrayType);
+            SValue allProperties(Type::kArrayType);
 
             if (properties && properties->IsObject())
                 for (ConstMemberIterator itr = properties->MemberBegin(); itr != properties->MemberEnd(); ++itr)
@@ -1539,7 +1539,7 @@ public:
         uri_.SetString(uri ? uri : noUri, uriLength, *allocator_);
 
         typeless_ = static_cast<SchemaType*>(allocator_->Malloc(sizeof(SchemaType)));
-        new (typeless_) SchemaType(this, PointerType(), ValueType(kObjectType).Move(), ValueType(kObjectType).Move(), allocator_);
+        new (typeless_) SchemaType(this, PointerType(), ValueType(Type::kObjectType).Move(), ValueType(Type::kObjectType).Move(), allocator_);
 
         // Generate root schema, it will call CreateSchema() to create sub-schemas,
         // And call AddRefSchema() if there are $ref.
@@ -1635,7 +1635,7 @@ private:
         if (schema)
             *schema = typeless_;
 
-        if (v.GetType() == kObjectType) {
+        if (v.GetType() == Type::kObjectType) {
             const SchemaType* s = GetSchema(pointer);
             if (!s)
                 CreateSchema(schema, pointer, v, document);
@@ -1643,7 +1643,7 @@ private:
             for (typename ValueType::ConstMemberIterator itr = v.MemberBegin(); itr != v.MemberEnd(); ++itr)
                 CreateSchemaRecursive(0, pointer.Append(itr->name, allocator_), itr->value, document);
         }
-        else if (v.GetType() == kArrayType)
+        else if (v.GetType() == Type::kArrayType)
             for (SizeType i = 0; i < v.Size(); i++)
                 CreateSchemaRecursive(0, pointer.Append(i, allocator_), v[i], document);
     }
@@ -1794,7 +1794,7 @@ public:
         schemaStack_(allocator, schemaStackCapacity),
         documentStack_(allocator, documentStackCapacity),
         outputHandler_(0),
-        error_(kObjectType),
+        error_(Type::kObjectType),
         currentError_(),
         missingDependents_(),
         valid_(true)
@@ -1825,7 +1825,7 @@ public:
         schemaStack_(allocator, schemaStackCapacity),
         documentStack_(allocator, documentStackCapacity),
         outputHandler_(&outputHandler),
-        error_(kObjectType),
+        error_(Type::kObjectType),
         currentError_(),
         missingDependents_(),
         valid_(true)
@@ -1942,7 +1942,7 @@ public:
             ValueType(actualCount).Move(), SValue(expectedCount).Move());
     }
     void DuplicateItems(SizeType index1, SizeType index2) {
-        ValueType duplicates(kArrayType);
+        ValueType duplicates(Type::kArrayType);
         duplicates.PushBack(index1, GetStateAllocator());
         duplicates.PushBack(index2, GetStateAllocator());
         currentError_.SetObject();
@@ -1967,7 +1967,7 @@ public:
     bool EndMissingProperties() {
         if (currentError_.Empty())
             return false;
-        ValueType error(kObjectType);
+        ValueType error(Type::kObjectType);
         error.AddMember(GetMissingString(), currentError_, GetStateAllocator());
         currentError_ = error;
         AddCurrentError(SchemaType::GetRequiredString());
@@ -2004,7 +2004,7 @@ public:
     bool EndDependencyErrors() {
         if (currentError_.ObjectEmpty())
             return false;
-        ValueType error(kObjectType);
+        ValueType error(Type::kObjectType);
         error.AddMember(GetErrorsString(), currentError_, GetStateAllocator());
         currentError_ = error;
         AddCurrentError(SchemaType::GetDependenciesString());
@@ -2022,7 +2022,7 @@ public:
         currentError_.PushBack(ValueType(expectedType, GetStateAllocator()).Move(), GetStateAllocator());
     }
     void EndDisallowedType(const typename SchemaType::ValueType& actualType) {
-        ValueType error(kObjectType);
+        ValueType error(Type::kObjectType);
         error.AddMember(GetExpectedString(), currentError_, GetStateAllocator());
         error.AddMember(GetActualString(), ValueType(actualType, GetStateAllocator()).Move(), GetStateAllocator());
         currentError_ = error;
@@ -2211,7 +2211,7 @@ private:
         schemaStack_(allocator, schemaStackCapacity),
         documentStack_(allocator, documentStackCapacity),
         outputHandler_(0),
-        error_(kObjectType),
+        error_(Type::kObjectType),
         currentError_(),
         missingDependents_(),
         valid_(true)
@@ -2282,7 +2282,7 @@ private:
             if (context.valueUniqueness) {
                 HashCodeArray* a = static_cast<HashCodeArray*>(context.arrayElementHashCodes);
                 if (!a)
-                    CurrentContext().arrayElementHashCodes = a = new (GetStateAllocator().Malloc(sizeof(HashCodeArray))) HashCodeArray(kArrayType);
+                    CurrentContext().arrayElementHashCodes = a = new (GetStateAllocator().Malloc(sizeof(HashCodeArray))) HashCodeArray(Type::kArrayType);
                 for (typename HashCodeArray::ConstValueIterator itr = a->Begin(); itr != a->End(); ++itr)
                     if (itr->GetUint64() == h) {
                         DuplicateItems(static_cast<SizeType>(itr - a->Begin()), a->Size());
@@ -2352,7 +2352,7 @@ private:
             error_.AddMember(keyword, error, GetStateAllocator());
         else {
             if (member->value.IsObject()) {
-                ValueType errors(kArrayType);
+                ValueType errors(Type::kArrayType);
                 errors.PushBack(member->value, GetStateAllocator());
                 member->value = errors;
             }
@@ -2383,7 +2383,7 @@ private:
 
     void AddErrorArray(const typename SchemaType::ValueType& keyword,
         ISchemaValidator** subvalidators, SizeType count) {
-        ValueType errors(kArrayType);
+        ValueType errors(Type::kArrayType);
         for (SizeType i = 0; i < count; ++i)
             errors.PushBack(static_cast<GenericSchemaValidator*>(subvalidators[i])->GetError(), GetStateAllocator());
         currentError_.SetObject();
@@ -2445,7 +2445,7 @@ public:
         \param is Input stream.
         \param sd Schema document.
     */
-    SchemaValidatingReader(InputStream& is, const SchemaDocumentType& sd) : is_(is), sd_(sd), invalidSchemaKeyword_(), error_(kObjectType), isValid_(true) {}
+    SchemaValidatingReader(InputStream& is, const SchemaDocumentType& sd) : is_(is), sd_(sd), invalidSchemaKeyword_(), error_(Type::kObjectType), isValid_(true) {}
 
     template <typename Handler>
     bool operator()(Handler& handler) {

@@ -179,31 +179,31 @@ public:
     */
     //@{
 
-    bool Null()                 { Prefix(kNullType);   return EndValue(WriteNull()); }
-    bool Bool(bool b)           { Prefix(b ? kTrueType : kFalseType); return EndValue(WriteBool(b)); }
-    bool Int(int i)             { Prefix(kNumberType); return EndValue(WriteInt(i)); }
-    bool Uint(unsigned u)       { Prefix(kNumberType); return EndValue(WriteUint(u)); }
-    bool Int64(int64_t i64)     { Prefix(kNumberType); return EndValue(WriteInt64(i64)); }
-    bool Uint64(uint64_t u64)   { Prefix(kNumberType); return EndValue(WriteUint64(u64)); }
+    bool Null()                 { Prefix(Type::kNullType);   return EndValue(WriteNull()); }
+    bool Bool(bool b)           { Prefix(b ? Type::kTrueType : Type::kFalseType); return EndValue(WriteBool(b)); }
+    bool Int(int i)             { Prefix(Type::kNumberType); return EndValue(WriteInt(i)); }
+    bool Uint(unsigned u)       { Prefix(Type::kNumberType); return EndValue(WriteUint(u)); }
+    bool Int64(int64_t i64)     { Prefix(Type::kNumberType); return EndValue(WriteInt64(i64)); }
+    bool Uint64(uint64_t u64)   { Prefix(Type::kNumberType); return EndValue(WriteUint64(u64)); }
 
     //! Writes the given \c double value to the stream
     /*!
         \param d The value to be written.
         \return Whether it is succeed.
     */
-    bool Double(double d)       { Prefix(kNumberType); return EndValue(WriteDouble(d)); }
+    bool Double(double d)       { Prefix(Type::kNumberType); return EndValue(WriteDouble(d)); }
 
     bool RawNumber(const Ch* str, SizeType length, bool copy = false) {
         RAPIDJSON_ASSERT(str != 0);
         (void)copy;
-        Prefix(kNumberType);
+        Prefix(Type::kNumberType);
         return EndValue(WriteString(str, length));
     }
 
     bool String(const Ch* str, SizeType length, bool copy = false) {
         RAPIDJSON_ASSERT(str != 0);
         (void)copy;
-        Prefix(kStringType);
+        Prefix(Type::kStringType);
         return EndValue(WriteString(str, length));
     }
 
@@ -214,7 +214,7 @@ public:
 #endif
 
     bool StartObject() {
-        Prefix(kObjectType);
+        Prefix(Type::kObjectType);
         new (level_stack_.template Push<Level>()) Level(false);
         return WriteStartObject();
     }
@@ -238,7 +238,7 @@ public:
     }
 
     bool StartArray() {
-        Prefix(kArrayType);
+        Prefix(Type::kArrayType);
         new (level_stack_.template Push<Level>()) Level(true);
         return WriteStartArray();
     }
@@ -481,7 +481,7 @@ protected:
                     os_->Put((level->valueCount % 2 == 0) ? ',' : ':');
             }
             if (!level->inArray && level->valueCount % 2 == 0)
-                RAPIDJSON_ASSERT(type == kStringType);  // if it's in object, then even number should be a name
+                RAPIDJSON_ASSERT(type == Type::kStringType);  // if it's in object, then even number should be a name
             level->valueCount++;
         }
         else {

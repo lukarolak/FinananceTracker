@@ -148,7 +148,7 @@ enum ParseFlag {
     kParseInsituFlag = 1,           //!< In-situ(destructive) parsing.
     kParseValidateEncodingFlag = 2, //!< Validate encoding of JSON strings.
     kParseIterativeFlag = 4,        //!< Iterative(constant complexity in terms of function call stack size) parsing.
-    kParseStopWhenDoneFlag = 8,     //!< After parsing a complete JSON root from stream, stop further processing the rest of stream. When this flag is used, parser will not generate kParseErrorDocumentRootNotSingular error.
+    kParseStopWhenDoneFlag = 8,     //!< After parsing a complete JSON root from stream, stop further processing the rest of stream. When this flag is used, parser will not generate ParseErrorCode::kParseErrorDocumentRootNotSingular error.
     kParseFullPrecisionFlag = 16,   //!< Parse number in full precision (but slower).
     kParseCommentsFlag = 32,        //!< Allow one-line (//) and multi-line (/**/) comments.
     kParseNumbersAsStringsFlag = 64,    //!< Parse all numbers (ints/doubles) as strings.
@@ -568,7 +568,7 @@ public:
         RAPIDJSON_PARSE_ERROR_EARLY_RETURN(parseResult_);
 
         if (RAPIDJSON_UNLIKELY(is.Peek() == '\0')) {
-            RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorDocumentEmpty, is.Tell());
+            RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorDocumentEmpty, is.Tell());
             RAPIDJSON_PARSE_ERROR_EARLY_RETURN(parseResult_);
         }
         else {
@@ -580,7 +580,7 @@ public:
                 RAPIDJSON_PARSE_ERROR_EARLY_RETURN(parseResult_);
 
                 if (RAPIDJSON_UNLIKELY(is.Peek() != '\0')) {
-                    RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorDocumentRootNotSingular, is.Tell());
+                    RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorDocumentRootNotSingular, is.Tell());
                     RAPIDJSON_PARSE_ERROR_EARLY_RETURN(parseResult_);
                 }
             }
@@ -716,7 +716,7 @@ private:
                 if (Consume(is, '*')) {
                     while (true) {
                         if (RAPIDJSON_UNLIKELY(is.Peek() == '\0'))
-                            RAPIDJSON_PARSE_ERROR(kParseErrorUnspecificSyntaxError, is.Tell());
+                            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorUnspecificSyntaxError, is.Tell());
                         else if (Consume(is, '*')) {
                             if (Consume(is, '/'))
                                 break;
@@ -728,7 +728,7 @@ private:
                 else if (RAPIDJSON_LIKELY(Consume(is, '/')))
                     while (is.Peek() != '\0' && is.Take() != '\n') {}
                 else
-                    RAPIDJSON_PARSE_ERROR(kParseErrorUnspecificSyntaxError, is.Tell());
+                    RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorUnspecificSyntaxError, is.Tell());
 
                 SkipWhitespace(is);
             }
@@ -742,20 +742,20 @@ private:
         is.Take();  // Skip '{'
 
         if (RAPIDJSON_UNLIKELY(!handler.StartObject()))
-            RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
 
         SkipWhitespaceAndComments<parseFlags>(is);
         RAPIDJSON_PARSE_ERROR_EARLY_RETURN_VOID;
 
         if (Consume(is, '}')) {
             if (RAPIDJSON_UNLIKELY(!handler.EndObject(0)))  // empty object
-                RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
             return;
         }
 
         for (SizeType memberCount = 0;;) {
             if (RAPIDJSON_UNLIKELY(is.Peek() != '"'))
-                RAPIDJSON_PARSE_ERROR(kParseErrorObjectMissName, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorObjectMissName, is.Tell());
 
             ParseString<parseFlags>(is, handler, true);
             RAPIDJSON_PARSE_ERROR_EARLY_RETURN_VOID;
@@ -764,7 +764,7 @@ private:
             RAPIDJSON_PARSE_ERROR_EARLY_RETURN_VOID;
 
             if (RAPIDJSON_UNLIKELY(!Consume(is, ':')))
-                RAPIDJSON_PARSE_ERROR(kParseErrorObjectMissColon, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorObjectMissColon, is.Tell());
 
             SkipWhitespaceAndComments<parseFlags>(is);
             RAPIDJSON_PARSE_ERROR_EARLY_RETURN_VOID;
@@ -786,16 +786,16 @@ private:
                 case '}':
                     is.Take();
                     if (RAPIDJSON_UNLIKELY(!handler.EndObject(memberCount)))
-                        RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                        RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
                     return;
                 default:
-                    RAPIDJSON_PARSE_ERROR(kParseErrorObjectMissCommaOrCurlyBracket, is.Tell()); break; // This useless break is only for making warning and coverage happy
+                    RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorObjectMissCommaOrCurlyBracket, is.Tell()); break; // This useless break is only for making warning and coverage happy
             }
 
             if (parseFlags & kParseTrailingCommasFlag) {
                 if (is.Peek() == '}') {
                     if (RAPIDJSON_UNLIKELY(!handler.EndObject(memberCount)))
-                        RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                        RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
                     is.Take();
                     return;
                 }
@@ -810,14 +810,14 @@ private:
         is.Take();  // Skip '['
 
         if (RAPIDJSON_UNLIKELY(!handler.StartArray()))
-            RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
 
         SkipWhitespaceAndComments<parseFlags>(is);
         RAPIDJSON_PARSE_ERROR_EARLY_RETURN_VOID;
 
         if (Consume(is, ']')) {
             if (RAPIDJSON_UNLIKELY(!handler.EndArray(0))) // empty array
-                RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
             return;
         }
 
@@ -835,16 +835,16 @@ private:
             }
             else if (Consume(is, ']')) {
                 if (RAPIDJSON_UNLIKELY(!handler.EndArray(elementCount)))
-                    RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                    RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
                 return;
             }
             else
-                RAPIDJSON_PARSE_ERROR(kParseErrorArrayMissCommaOrSquareBracket, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorArrayMissCommaOrSquareBracket, is.Tell());
 
             if (parseFlags & kParseTrailingCommasFlag) {
                 if (is.Peek() == ']') {
                     if (RAPIDJSON_UNLIKELY(!handler.EndArray(elementCount)))
-                        RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                        RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
                     is.Take();
                     return;
                 }
@@ -859,10 +859,10 @@ private:
 
         if (RAPIDJSON_LIKELY(Consume(is, 'u') && Consume(is, 'l') && Consume(is, 'l'))) {
             if (RAPIDJSON_UNLIKELY(!handler.Null()))
-                RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
         }
         else
-            RAPIDJSON_PARSE_ERROR(kParseErrorValueInvalid, is.Tell());
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorValueInvalid, is.Tell());
     }
 
     template<unsigned parseFlags, typename InputStream, typename Handler>
@@ -872,10 +872,10 @@ private:
 
         if (RAPIDJSON_LIKELY(Consume(is, 'r') && Consume(is, 'u') && Consume(is, 'e'))) {
             if (RAPIDJSON_UNLIKELY(!handler.Bool(true)))
-                RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
         }
         else
-            RAPIDJSON_PARSE_ERROR(kParseErrorValueInvalid, is.Tell());
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorValueInvalid, is.Tell());
     }
 
     template<unsigned parseFlags, typename InputStream, typename Handler>
@@ -885,10 +885,10 @@ private:
 
         if (RAPIDJSON_LIKELY(Consume(is, 'a') && Consume(is, 'l') && Consume(is, 's') && Consume(is, 'e'))) {
             if (RAPIDJSON_UNLIKELY(!handler.Bool(false)))
-                RAPIDJSON_PARSE_ERROR(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, is.Tell());
         }
         else
-            RAPIDJSON_PARSE_ERROR(kParseErrorValueInvalid, is.Tell());
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorValueInvalid, is.Tell());
     }
 
     template<typename InputStream>
@@ -916,7 +916,7 @@ private:
             else if (c >= 'a' && c <= 'f')
                 codepoint -= 'a' - 10;
             else {
-                RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorStringUnicodeEscapeInvalidHex, escapeOffset);
+                RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorStringUnicodeEscapeInvalidHex, escapeOffset);
                 RAPIDJSON_PARSE_ERROR_EARLY_RETURN(0);
             }
             is.Take();
@@ -982,7 +982,7 @@ private:
             success = (isKey ? handler.Key(str, length, true) : handler.String(str, length, true));
         }
         if (RAPIDJSON_UNLIKELY(!success))
-            RAPIDJSON_PARSE_ERROR(kParseErrorTermination, s.Tell());
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, s.Tell());
     }
 
     // Parse string to an output is
@@ -1028,23 +1028,23 @@ private:
                         if (RAPIDJSON_LIKELY(codepoint <= 0xDBFF)) {
                             // Handle UTF-16 surrogate pair
                             if (RAPIDJSON_UNLIKELY(!Consume(is, '\\') || !Consume(is, 'u')))
-                                RAPIDJSON_PARSE_ERROR(kParseErrorStringUnicodeSurrogateInvalid, escapeOffset);
+                                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorStringUnicodeSurrogateInvalid, escapeOffset);
                             unsigned codepoint2 = ParseHex4(is, escapeOffset);
                             RAPIDJSON_PARSE_ERROR_EARLY_RETURN_VOID;
                             if (RAPIDJSON_UNLIKELY(codepoint2 < 0xDC00 || codepoint2 > 0xDFFF))
-                                RAPIDJSON_PARSE_ERROR(kParseErrorStringUnicodeSurrogateInvalid, escapeOffset);
+                                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorStringUnicodeSurrogateInvalid, escapeOffset);
                             codepoint = (((codepoint - 0xD800) << 10) | (codepoint2 - 0xDC00)) + 0x10000;
                         }
                         // single low surrogate
                         else
                         {
-                            RAPIDJSON_PARSE_ERROR(kParseErrorStringUnicodeSurrogateInvalid, escapeOffset);
+                            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorStringUnicodeSurrogateInvalid, escapeOffset);
                         }
                     }
                     TEncoding::Encode(os, codepoint);
                 }
                 else
-                    RAPIDJSON_PARSE_ERROR(kParseErrorStringEscapeInvalid, escapeOffset);
+                    RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorStringEscapeInvalid, escapeOffset);
             }
             else if (RAPIDJSON_UNLIKELY(c == '"')) {    // Closing double quote
                 is.Take();
@@ -1053,16 +1053,16 @@ private:
             }
             else if (RAPIDJSON_UNLIKELY(static_cast<unsigned>(c) < 0x20)) { // RFC 4627: unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
                 if (c == '\0')
-                    RAPIDJSON_PARSE_ERROR(kParseErrorStringMissQuotationMark, is.Tell());
+                    RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorStringMissQuotationMark, is.Tell());
                 else
-                    RAPIDJSON_PARSE_ERROR(kParseErrorStringInvalidEncoding, is.Tell());
+                    RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorStringInvalidEncoding, is.Tell());
             }
             else {
                 size_t offset = is.Tell();
                 if (RAPIDJSON_UNLIKELY((parseFlags & kParseValidateEncodingFlag ?
                     !Transcoder<SEncoding, TEncoding>::Validate(is, os) :
                     !Transcoder<SEncoding, TEncoding>::Transcode(is, os))))
-                    RAPIDJSON_PARSE_ERROR(kParseErrorStringInvalidEncoding, offset);
+                    RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorStringInvalidEncoding, offset);
             }
         }
     }
@@ -1533,17 +1533,17 @@ private:
 
                     if (RAPIDJSON_UNLIKELY(s.Peek() == 'i' && !(Consume(s, 'i') && Consume(s, 'n')
                                                                 && Consume(s, 'i') && Consume(s, 't') && Consume(s, 'y')))) {
-                        RAPIDJSON_PARSE_ERROR(kParseErrorValueInvalid, s.Tell());
+                        RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorValueInvalid, s.Tell());
                     }
                 }
             }
 
             if (RAPIDJSON_UNLIKELY(!useNanOrInf)) {
-                RAPIDJSON_PARSE_ERROR(kParseErrorValueInvalid, s.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorValueInvalid, s.Tell());
             }
         }
         else
-            RAPIDJSON_PARSE_ERROR(kParseErrorValueInvalid, s.Tell());
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorValueInvalid, s.Tell());
 
         // Parse 64bit int
         bool useDouble = false;
@@ -1586,7 +1586,7 @@ private:
             decimalPosition = s.Length();
 
             if (RAPIDJSON_UNLIKELY(!(s.Peek() >= '0' && s.Peek() <= '9')))
-                RAPIDJSON_PARSE_ERROR(kParseErrorNumberMissFraction, s.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorNumberMissFraction, s.Tell());
 
             if (!useDouble) {
 #if RAPIDJSON_64BIT
@@ -1666,12 +1666,12 @@ private:
                     while (RAPIDJSON_LIKELY(s.Peek() >= '0' && s.Peek() <= '9')) {
                         exp = exp * 10 + static_cast<int>(s.Take() - '0');
                         if (RAPIDJSON_UNLIKELY(exp > maxExp))
-                            RAPIDJSON_PARSE_ERROR(kParseErrorNumberTooBig, startOffset);
+                            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorNumberTooBig, startOffset);
                     }
                 }
             }
             else
-                RAPIDJSON_PARSE_ERROR(kParseErrorNumberMissExponent, s.Tell());
+                RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorNumberMissExponent, s.Tell());
 
             if (expMinus)
                 exp = -exp;
@@ -1718,7 +1718,7 @@ private:
                if (d > (std::numeric_limits<double>::max)()) {
                    // Overflow
                    // TODO: internal::StrtodX should report overflow (or underflow)
-                   RAPIDJSON_PARSE_ERROR(kParseErrorNumberTooBig, startOffset);
+                   RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorNumberTooBig, startOffset);
                }
 
                cont = handler.Double(minus ? -d : d);
@@ -1742,7 +1742,7 @@ private:
            }
         }
         if (RAPIDJSON_UNLIKELY(!cont))
-            RAPIDJSON_PARSE_ERROR(kParseErrorTermination, startOffset);
+            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorTermination, startOffset);
     }
 
     // Parse any JSON value
@@ -2031,7 +2031,7 @@ private:
             bool hr = (dst == IterativeParsingObjectInitialState) ? handler.StartObject() : handler.StartArray();
             // On handler short circuits the parsing.
             if (!hr) {
-                RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorTermination, is.Tell());
                 return IterativeParsingErrorState;
             }
             else {
@@ -2079,7 +2079,7 @@ private:
         {
             // Transit from delimiter is only allowed when trailing commas are enabled
             if (!(parseFlags & kParseTrailingCommasFlag) && src == IterativeParsingMemberDelimiterState) {
-                RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorObjectMissName, is.Tell());
+                RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorObjectMissName, is.Tell());
                 return IterativeParsingErrorState;
             }
             // Get member count.
@@ -2096,7 +2096,7 @@ private:
             bool hr = handler.EndObject(c);
             // On handler short circuits the parsing.
             if (!hr) {
-                RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorTermination, is.Tell());
                 return IterativeParsingErrorState;
             }
             else {
@@ -2109,7 +2109,7 @@ private:
         {
             // Transit from delimiter is only allowed when trailing commas are enabled
             if (!(parseFlags & kParseTrailingCommasFlag) && src == IterativeParsingElementDelimiterState) {
-                RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorValueInvalid, is.Tell());
+                RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorValueInvalid, is.Tell());
                 return IterativeParsingErrorState;
             }
             // Get element count.
@@ -2126,7 +2126,7 @@ private:
             bool hr = handler.EndArray(c);
             // On handler short circuits the parsing.
             if (!hr) {
-                RAPIDJSON_PARSE_ERROR_NORETURN(kParseErrorTermination, is.Tell());
+                RAPIDJSON_PARSE_ERROR_NORETURN(ParseErrorCode::kParseErrorTermination, is.Tell());
                 return IterativeParsingErrorState;
             }
             else {
@@ -2165,16 +2165,16 @@ private:
         }
 
         switch (src) {
-        case IterativeParsingStartState:            RAPIDJSON_PARSE_ERROR(kParseErrorDocumentEmpty, is.Tell()); return;
-        case IterativeParsingFinishState:           RAPIDJSON_PARSE_ERROR(kParseErrorDocumentRootNotSingular, is.Tell()); return;
+        case IterativeParsingStartState:            RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorDocumentEmpty, is.Tell()); return;
+        case IterativeParsingFinishState:           RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorDocumentRootNotSingular, is.Tell()); return;
         case IterativeParsingObjectInitialState:
-        case IterativeParsingMemberDelimiterState:  RAPIDJSON_PARSE_ERROR(kParseErrorObjectMissName, is.Tell()); return;
-        case IterativeParsingMemberKeyState:        RAPIDJSON_PARSE_ERROR(kParseErrorObjectMissColon, is.Tell()); return;
-        case IterativeParsingMemberValueState:      RAPIDJSON_PARSE_ERROR(kParseErrorObjectMissCommaOrCurlyBracket, is.Tell()); return;
+        case IterativeParsingMemberDelimiterState:  RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorObjectMissName, is.Tell()); return;
+        case IterativeParsingMemberKeyState:        RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorObjectMissColon, is.Tell()); return;
+        case IterativeParsingMemberValueState:      RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorObjectMissCommaOrCurlyBracket, is.Tell()); return;
         case IterativeParsingKeyValueDelimiterState:
         case IterativeParsingArrayInitialState:
-        case IterativeParsingElementDelimiterState: RAPIDJSON_PARSE_ERROR(kParseErrorValueInvalid, is.Tell()); return;
-        default: RAPIDJSON_ASSERT(src == IterativeParsingElementState); RAPIDJSON_PARSE_ERROR(kParseErrorArrayMissCommaOrSquareBracket, is.Tell()); return;
+        case IterativeParsingElementDelimiterState: RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorValueInvalid, is.Tell()); return;
+        default: RAPIDJSON_ASSERT(src == IterativeParsingElementState); RAPIDJSON_PARSE_ERROR(ParseErrorCode::kParseErrorArrayMissCommaOrSquareBracket, is.Tell()); return;
         }
     }
 

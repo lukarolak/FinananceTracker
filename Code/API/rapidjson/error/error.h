@@ -61,7 +61,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 /*! \ingroup RAPIDJSON_ERRORS
     \see GenericReader::Parse, GenericReader::GetParseErrorCode
 */
-enum ParseErrorCode {
+enum class ParseErrorCode {
     kParseErrorNone = 0,                        //!< No error.
 
     kParseErrorDocumentEmpty,                   //!< The document is empty.
@@ -108,7 +108,7 @@ struct ParseResult {
     typedef bool (ParseResult::*BooleanType)() const;
 public:
     //! Default constructor, no error.
-    ParseResult() : code_(kParseErrorNone), offset_(0) {}
+    ParseResult() : code_(ParseErrorCode::kParseErrorNone), offset_(0) {}
     //! Constructor to set an error.
     ParseResult(ParseErrorCode code, size_t offset) : code_(code), offset_(offset) {}
 
@@ -120,7 +120,7 @@ public:
     //! Explicit conversion to \c bool, returns \c true, iff !\ref IsError().
     operator BooleanType() const { return !IsError() ? &ParseResult::IsError : NULL; }
     //! Whether the result is an error.
-    bool IsError() const { return code_ != kParseErrorNone; }
+    bool IsError() const { return code_ != ParseErrorCode::kParseErrorNone; }
 
     bool operator==(const ParseResult& that) const { return code_ == that.code_; }
     bool operator==(ParseErrorCode code) const { return code_ == code; }
@@ -131,7 +131,7 @@ public:
     friend bool operator!=(ParseErrorCode code, const ParseResult & err) { return err != code; }
 
     //! Reset error code.
-    void Clear() { Set(kParseErrorNone); }
+    void Clear() { Set(ParseErrorCode::kParseErrorNone); }
     //! Update error code and offset.
     void Set(ParseErrorCode code, size_t offset = 0) { code_ = code; offset_ = offset; }
 

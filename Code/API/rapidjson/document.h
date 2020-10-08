@@ -711,11 +711,11 @@ public:
             kNullFlag, kFalseFlag, kTrueFlag, kObjectFlag, kArrayFlag, kShortStringFlag,
             kNumberAnyFlag
         };
-        RAPIDJSON_NOEXCEPT_ASSERT(type >= kNullType && type <= kNumberType);
-        data_.f.flags = defaultFlags[type];
+        RAPIDJSON_NOEXCEPT_ASSERT(type >= Type::kNullType && type <= Type::kNumberType);
+        data_.f.flags = defaultFlags[static_cast<uint16_t>(type)];
 
         // Use ShortString to store empty string.
-        if (type == kStringType)
+        if (type == Type::kStringType)
             data_.ss.SetLength(0);
     }
 
@@ -730,7 +730,7 @@ public:
     template <typename SourceAllocator>
     GenericValue(const GenericValue<Encoding,SourceAllocator>& rhs, Allocator& allocator, bool copyConstStrings = false) {
         switch (rhs.GetType()) {
-        case kObjectType: {
+        case Type::kObjectType: {
                 SizeType count = rhs.data_.o.size;
                 Member* lm = reinterpret_cast<Member*>(allocator.Malloc(count * sizeof(Member)));
                 const typename GenericValue<Encoding,SourceAllocator>::Member* rm = rhs.GetMembersPointer();
@@ -743,7 +743,7 @@ public:
                 SetMembersPointer(lm);
             }
             break;
-        case kArrayType: {
+        case Type::kArrayType: {
                 SizeType count = rhs.data_.a.size;
                 GenericValue* le = reinterpret_cast<GenericValue*>(allocator.Malloc(count * sizeof(GenericValue)));
                 const GenericValue<Encoding,SourceAllocator>* re = rhs.GetElementsPointer();
@@ -754,7 +754,7 @@ public:
                 SetElementsPointer(le);
             }
             break;
-        case kStringType:
+        case Type::kStringType:
             if (rhs.data_.f.flags == kConstStringFlag && !copyConstStrings) {
                 data_.f.flags = rhs.data_.f.flags;
                 data_  = *reinterpret_cast<const Data*>(&rhs.data_);
@@ -1017,7 +1017,7 @@ public:
             return false;
 
         switch (GetType()) {
-        case kObjectType: // Warning: O(n^2) inner-loop
+        case Type::kObjectType: // Warning: O(n^2) inner-loop
             if (data_.o.size != rhs.data_.o.size)
                 return false;           
             for (ConstMemberIterator lhsMemberItr = MemberBegin(); lhsMemberItr != MemberEnd(); ++lhsMemberItr) {
@@ -1027,7 +1027,7 @@ public:
             }
             return true;
             
-        case kArrayType:
+        case Type::kArrayType:
             if (data_.a.size != rhs.data_.a.size)
                 return false;
             for (SizeType i = 0; i < data_.a.size; i++)
@@ -1035,10 +1035,10 @@ public:
                     return false;
             return true;
 
-        case kStringType:
+        case Type::kStringType:
             return StringEqual(rhs);
 
-        case kNumberType:
+        case Type::kNumberType:
             if (IsDouble() || rhs.IsDouble()) {
                 double a = GetDouble();     // May convert from integer to double.
                 double b = rhs.GetDouble(); // Ditto
@@ -1172,7 +1172,7 @@ public:
 
     //! Set this value as an empty object.
     /*! \post IsObject() == true */
-    GenericValue& SetObject() { this->~GenericValue(); new (this) GenericValue(kObjectType); return *this; }
+    GenericValue& SetObject() { this->~GenericValue(); new (this) GenericValue(Type::kObjectType); return *this; }
 
     //! Get the number of members in the object.
     SizeType MemberCount() const { RAPIDJSON_ASSERT(IsObject()); return data_.o.size; }
@@ -1636,7 +1636,7 @@ public:
 
     //! Set this value as an empty array.
     /*! \post IsArray == true */
-    GenericValue& SetArray() { this->~GenericValue(); new (this) GenericValue(kArrayType); return *this; }
+    GenericValue& SetArray() { this->~GenericValue(); new (this) GenericValue(Type::kArrayType); return *this; }
 
     //! Get the number of elements in array.
     SizeType Size() const { RAPIDJSON_ASSERT(IsArray()); return data_.a.size; }
@@ -1946,11 +1946,11 @@ public:
     template <typename Handler>
     bool Accept(Handler& handler) const {
         switch(GetType()) {
-        case kNullType:     return handler.Null();
-        case kFalseType:    return handler.Bool(false);
-        case kTrueType:     return handler.Bool(true);
+        case Type::kNullType:     return handler.Null();
+        case Type::kFalseType:    return handler.Bool(false);
+        case Type::kTrueType:     return handler.Bool(true);
 
-        case kObjectType:
+        case Type::kObjectType:
             if (RAPIDJSON_UNLIKELY(!handler.StartObject()))
                 return false;
             for (ConstMemberIterator m = MemberBegin(); m != MemberEnd(); ++m) {
@@ -1962,7 +1962,7 @@ public:
             }
             return handler.EndObject(data_.o.size);
 
-        case kArrayType:
+        case Type::kArrayType:
             if (RAPIDJSON_UNLIKELY(!handler.StartArray()))
                 return false;
             for (const GenericValue* v = Begin(); v != End(); ++v)
@@ -1970,11 +1970,11 @@ public:
                     return false;
             return handler.EndArray(data_.a.size);
     
-        case kStringType:
+        case Type::kStringType:
             return handler.String(GetString(), GetStringLength(), (data_.f.flags & kCopyFlag) != 0);
     
         default:
-            RAPIDJSON_ASSERT(GetType() == kNumberType);
+            RAPIDJSON_ASSERT(GetType() == Type::kNumberType);
             if (IsDouble())         return handler.Double(data_.n.d);
             else if (IsInt())       return handler.Int(data_.n.i.i);
             else if (IsUint())      return handler.Uint(data_.n.u.u);
@@ -1986,7 +1986,7 @@ public:
 private:
     template <typename, typename> friend class GenericValue;
     template <typename, typename, typename> friend class GenericDocument;
-
+    
     enum {
         kBoolFlag       = 0x0008,
         kNumberFlag     = 0x0010,
@@ -2000,20 +2000,20 @@ private:
         kInlineStrFlag  = 0x1000,
 
         // Initial flags of different types.
-        kNullFlag = kNullType,
-        kTrueFlag = kTrueType | kBoolFlag,
-        kFalseFlag = kFalseType | kBoolFlag,
-        kNumberIntFlag = kNumberType | kNumberFlag | kIntFlag | kInt64Flag,
-        kNumberUintFlag = kNumberType | kNumberFlag | kUintFlag | kUint64Flag | kInt64Flag,
-        kNumberInt64Flag = kNumberType | kNumberFlag | kInt64Flag,
-        kNumberUint64Flag = kNumberType | kNumberFlag | kUint64Flag,
-        kNumberDoubleFlag = kNumberType | kNumberFlag | kDoubleFlag,
-        kNumberAnyFlag = kNumberType | kNumberFlag | kIntFlag | kInt64Flag | kUintFlag | kUint64Flag | kDoubleFlag,
-        kConstStringFlag = kStringType | kStringFlag,
-        kCopyStringFlag = kStringType | kStringFlag | kCopyFlag,
-        kShortStringFlag = kStringType | kStringFlag | kCopyFlag | kInlineStrFlag,
-        kObjectFlag = kObjectType,
-        kArrayFlag = kArrayType,
+        kNullFlag = Type::kNullType,
+        kTrueFlag = static_cast<int>(Type::kTrueType) | kBoolFlag,
+        kFalseFlag = static_cast<int>(Type::kFalseType) | kBoolFlag,
+        kNumberIntFlag = static_cast<int>(Type::kNumberType) | kNumberFlag | kIntFlag | kInt64Flag,
+        kNumberUintFlag = static_cast<int>(Type::kNumberType) | kNumberFlag | kUintFlag | kUint64Flag | kInt64Flag,
+        kNumberInt64Flag = static_cast<int>(Type::kNumberType) | kNumberFlag | kInt64Flag,
+        kNumberUint64Flag = static_cast<int>(Type::kNumberType) | kNumberFlag | kUint64Flag,
+        kNumberDoubleFlag = static_cast<int>(Type::kNumberType) | kNumberFlag | kDoubleFlag,
+        kNumberAnyFlag = static_cast<int>(Type::kNumberType) | kNumberFlag | kIntFlag | kInt64Flag | kUintFlag | kUint64Flag | kDoubleFlag,
+        kConstStringFlag = static_cast<int>(Type::kStringType) | kStringFlag,
+        kCopyStringFlag = static_cast<int>(Type::kStringType) | kStringFlag | kCopyFlag,
+        kShortStringFlag = static_cast<int>(Type::kStringType) | kStringFlag | kCopyFlag | kInlineStrFlag,
+        kObjectFlag = Type::kObjectType,
+        kArrayFlag = Type::kArrayType,
 
         kTypeMask = 0x07
     };
@@ -2537,7 +2537,7 @@ public:
         return true;
     }
 
-    bool StartObject() { new (stack_.template Push<ValueType>()) ValueType(kObjectType); return true; }
+    bool StartObject() { new (stack_.template Push<ValueType>()) ValueType(Type::kObjectType); return true; }
     
     bool Key(const Ch* str, SizeType length, bool copy) { return String(str, length, copy); }
 
@@ -2547,7 +2547,7 @@ public:
         return true;
     }
 
-    bool StartArray() { new (stack_.template Push<ValueType>()) ValueType(kArrayType); return true; }
+    bool StartArray() { new (stack_.template Push<ValueType>()) ValueType(Type::kArrayType); return true; }
     
     bool EndArray(SizeType elementCount) {
         ValueType* elements = stack_.template Pop<ValueType>(elementCount);
