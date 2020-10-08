@@ -6,15 +6,13 @@ std::optional<OneTimePayment> IO_OneTimePayment::ReadData(const rapidjson::Value
 {
     OneTimePayment oneTimePayment;
 
-    const auto dateExists = Data.HasMember("Date");
-    if (dateExists == false) 
+    if (Data.HasMember("Date") == false)
     {
         AssertNoCrash("\"Date\" field is not present in one time payment");
         return {};
     }
 
     const auto& date_wrapper =  IO_Date::ReadData(Data["Date"]);
-
     if (date_wrapper.has_value() == false)
     {
         AssertNoCrash("Can't get a date from OneTimePayment data");
@@ -23,15 +21,13 @@ std::optional<OneTimePayment> IO_OneTimePayment::ReadData(const rapidjson::Value
 
     oneTimePayment.SetDate(date_wrapper.value());
 
-    const auto timeExists = Data.HasMember("Time");
-    if (timeExists == false)
+    if (Data.HasMember("Time") == false)
     {
         AssertNoCrash("\"Time\" field is not present in one time payment");
         return {};
     }
 
     const auto& time_wrapper = IO_Time::ReadData(Data["Time"]);
-
     if (time_wrapper.has_value() == false)
     {
         AssertNoCrash("Can't get time from OneTimePayment data");

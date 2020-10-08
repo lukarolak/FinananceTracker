@@ -39,9 +39,6 @@
     <ClInclude Include="Code\Data\Price\Currency\Currency.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Data\Price\Price.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Code\API\rapidjson\error\en.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -171,6 +168,12 @@
     <ClInclude Include="Code\Helper\CharToInt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Data\Money\Money.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Data\Money\IO\IO_Money.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Data\Time\Date\Date.cpp">
@@ -210,6 +213,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Helper\CharToInt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Data\Money\Money.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Data\Money\IO\IO_Money.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

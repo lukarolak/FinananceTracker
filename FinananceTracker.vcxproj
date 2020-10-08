@@ -56,10 +56,11 @@
     <ClInclude Include="Code\API\rapidjson\stream.h" />
     <ClInclude Include="Code\API\rapidjson\stringbuffer.h" />
     <ClInclude Include="Code\API\rapidjson\writer.h" />
+    <ClInclude Include="Code\Data\Money\IO\IO_Money.h" />
+    <ClInclude Include="Code\Data\Money\Money.h" />
     <ClInclude Include="Code\Data\Payment\OneTimePayment\IO\IO_OneTimePayment.h" />
     <ClInclude Include="Code\Data\Payment\OneTimePayment\OneTimePayment.h" />
     <ClInclude Include="Code\Data\Price\Currency\Currency.h" />
-    <ClInclude Include="Code\Data\Price\Price.h" />
     <ClInclude Include="Code\Data\Time\Date\Date.h" />
     <ClInclude Include="Code\Data\Time\Date\IO\IO_Date.h" />
     <ClInclude Include="Code\Data\Time\Date\Months.h" />
@@ -73,6 +74,8 @@
     <ClInclude Include="Code\Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\Data\Money\IO\IO_Money.cpp" />
+    <ClCompile Include="Code\Data\Money\Money.cpp" />
     <ClCompile Include="Code\Data\Payment\OneTimePayment\IO\IO_OneTimePayment.cpp" />
     <ClCompile Include="Code\Data\Payment\OneTimePayment\OneTimePayment.cpp" />
     <ClCompile Include="Code\Data\Time\Date\Date.cpp" />
