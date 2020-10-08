@@ -27,9 +27,6 @@
     <ClInclude Include="Code\Data\Time\Time\Time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Data\Time\DateAndTime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Code\Error\Error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -159,13 +156,19 @@
     <ClInclude Include="Code\FileIO\JsonReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Data\Payment\IO\IO_Date.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Code\Tests\ReadOneTimePayment\ReadOneTimePayment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Code\Tests\Tests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Data\Time\Date\IO\IO_Date.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Data\Time\Time\IO\IO_Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Helper\CharToInt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -185,9 +188,6 @@
     <ClCompile Include="Code\FinananceTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Data\Time\DateAndTime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Code\Data\Payment\OneTimePayment\IO\IO_OneTimePayment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -197,13 +197,19 @@
     <ClCompile Include="Code\Data\Payment\OneTimePayment\OneTimePayment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Data\Payment\IO\IO_Date.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Code\Tests\ReadOneTimePayment\ReadOneTimePayment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Tests\Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Data\Time\Date\IO\IO_Date.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Data\Time\Time\IO\IO_Time.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Helper\CharToInt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

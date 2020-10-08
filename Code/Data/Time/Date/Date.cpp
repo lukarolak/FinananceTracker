@@ -22,23 +22,28 @@ void Date::SetDate(const Date& DateIn)
 	m_month = DateIn.GetMonth();
 	m_day = DateIn.GetDay();
 }
-bool Date::SetDate(const unsigned int Year, eMonth Month, const unsigned int Day)
+
+bool Date::SetDate(const unsigned int Year, const unsigned int Month, const unsigned int Day)
 {
 	bool success = false;
 	if (ValidateDateCorrectness(Year, Month, Day))
 	{
 		m_year = Year;
-		m_month = Month;
+		m_month = static_cast<eMonth>(Month);
 		m_day = Day;
 		success = true;
 	}
 	return success;
 }
 
-bool Date::ValidateDateCorrectness(unsigned int Year, eMonth Month, unsigned int Day) const
+bool Date::ValidateDateCorrectness(const unsigned int Year, const unsigned int Month, const unsigned int Day) const
 {
+	if (Month < static_cast<int>(eMonth::January) && Month > static_cast<int>(eMonth::December))
+		return false;
+
 	unsigned int dayInAMonth = 0;
-	switch (Month)
+
+	switch (static_cast<eMonth>(Month))
 	{
 	case eMonth::January:
 		dayInAMonth = 31;
@@ -85,7 +90,8 @@ bool Date::ValidateDateCorrectness(unsigned int Year, eMonth Month, unsigned int
 		break;
 	}
 
-	return dayInAMonth <= Day;
+	const bool DayWithinMaximumDaysInAMonth = dayInAMonth >= Day;
+	return DayWithinMaximumDaysInAMonth;
 }
 
 bool Date::IsLeapYear(const unsigned int Year) const

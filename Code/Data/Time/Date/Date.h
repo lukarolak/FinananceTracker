@@ -4,12 +4,12 @@ class Date
 {
 public:
 	void SetDate(const Date& DateIn);
-	bool SetDate(const unsigned int Year, eMonth Month, const unsigned int Day);
+	bool SetDate(const unsigned int Year, const unsigned int Month, const unsigned int Day);
 	auto GetYear() const;
 	auto GetMonth() const;
 	auto GetDay() const;
 private:
-	bool ValidateDateCorrectness(const unsigned int Year,const eMonth Month,const unsigned int Day) const;
+	bool ValidateDateCorrectness(const unsigned int Year, const unsigned int Month,const unsigned int Day) const;
 	bool IsLeapYear(const unsigned int Year) const;
 	unsigned int m_year = 0;
 	eMonth m_month = eMonth::January;

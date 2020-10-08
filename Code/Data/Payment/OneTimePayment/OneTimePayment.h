@@ -1,11 +1,13 @@
 #pragma once
-#include <Data/Time/DateAndTime.h>
+#include <Data/Time/Date/Date.h>
+#include <Data/Time/Time/Time.h>
 #include <string>
 class OneTimePayment
 {
 public:
-	bool SetDate(const std::string& Date);
-	bool SetTime(const std::string& Time);
+	void SetDate(const Date& Date);
+	void SetTime(const Time& Time);
 private:
-	DateAndTime m_DateAndTime;
+	Date m_Date;
+	Time m_Time;
 };

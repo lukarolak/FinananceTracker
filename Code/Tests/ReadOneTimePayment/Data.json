@@ -1,5 +1,21 @@
 {
-    "OneTimePayment" : {
-        "Date" : "26/09/2020"
-    }
+    "OneTimePayments" : 
+    [
+        {
+            "OneTimePayment" :
+            {
+                "Date" : "26/09/2020",
+                "Time" : "00:00:00",
+                "Amount" : 0
+            }
+        },
+        {
+            "OneTimePayment" :
+            {
+                "Date" : "26/09/2020",
+                "Time" : "01:01:01",
+                "Amount" : 100
+            }
+        }
+    ]
 }

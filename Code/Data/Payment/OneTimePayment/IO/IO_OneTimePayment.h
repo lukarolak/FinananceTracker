@@ -4,8 +4,8 @@
 #include <FileIO/JsonReader.h>
 #include <optional>
 
-class IO_OneTimePayment
+namespace IO_OneTimePayment
 {
-	std::optional<OneTimePayment> ReadData(const rapidjson::Document& Data);
+	std::optional<OneTimePayment> ReadData(const rapidjson::Value& Data);
 	void WriteData(const OneTimePayment& ObjectIn);
 };
