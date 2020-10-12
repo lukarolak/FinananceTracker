@@ -69,6 +69,7 @@
     <ClInclude Include="Code\Error\Error.h" />
     <ClInclude Include="Code\FileIO\JsonReader.h" />
     <ClInclude Include="Code\Helper\CharToInt.h" />
+    <ClInclude Include="Code\Helper\PathOfExe.h" />
     <ClInclude Include="Code\Logging\Logging.h" />
     <ClInclude Include="Code\Tests\ReadOneTimePayment\ReadOneTimePayment.h" />
     <ClInclude Include="Code\Tests\Tests.h" />
@@ -82,11 +83,9 @@
     <ClCompile Include="Code\Data\Time\Date\IO\IO_Date.cpp" />
     <ClCompile Include="Code\Data\Time\Time\IO\IO_Time.cpp" />
     <ClCompile Include="Code\Data\Time\Time\Time.cpp" />
-    <ClCompile Include="Code\Error\Error.cpp" />
-    <ClCompile Include="Code\FileIO\JsonReader.cpp" />
     <ClCompile Include="Code\FinananceTracker.cpp" />
     <ClCompile Include="Code\Helper\CharToInt.cpp" />
-    <ClCompile Include="Code\Logging\Logging.cpp" />
+    <ClCompile Include="Code\Helper\PathOfExe.cpp" />
     <ClCompile Include="Code\Tests\ReadOneTimePayment\ReadOneTimePayment.cpp" />
     <ClCompile Include="Code\Tests\Tests.cpp" />
   </ItemGroup>

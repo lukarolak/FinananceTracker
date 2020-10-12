@@ -1,3 +1,8 @@
 #pragma once
 #include <string>
-void Log(std::string Msg);
+
+template <typename MsgType>
+void Log(MsgType Msg)
+{
+
+}

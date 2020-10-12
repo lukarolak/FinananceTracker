@@ -2,9 +2,13 @@
 #include <FileIO/JsonReader.h>
 #include <Error/Error.h>
 #include <Data/Payment/OneTimePayment/IO/IO_OneTimePayment.h>
+#include <Helper/PathOfExe.h>
 bool ReadOneTimePaymentTest()
 {
-    const auto& data_wrapper = ReadJson("C:\\Users\\Luka\\source\\repos\\FinananceTracker\\Code\\Tests\\ReadOneTimePayment\\Data.json");
+    std::wstring exePath = GetExePathInstance().GetExePath();
+    exePath.append(L"\\..\\..\\Code\\Tests\\ReadOneTimePayment\\Data.json");
+
+    const auto& data_wrapper = ReadJson(exePath);
 
     if (data_wrapper.has_value() == false)
     {

@@ -2,6 +2,8 @@
 #include <Error/Error.h>
 #include <Data/Time/Date/IO/IO_Date.h>
 #include <Data/Time/Time/IO/IO_Time.h>
+#include <Data/Money/IO/IO_Money.h>
+
 std::optional<OneTimePayment> IO_OneTimePayment::ReadData(const rapidjson::Value& Data)
 {
     OneTimePayment oneTimePayment;
@@ -35,6 +37,21 @@ std::optional<OneTimePayment> IO_OneTimePayment::ReadData(const rapidjson::Value
     }
 
     oneTimePayment.SetTime(time_wrapper.value());
+
+    if (Data.HasMember("Money") == false)
+    {
+        AssertNoCrash("\"Money\" field is not present in one time payment");
+        return {};
+    }
+
+    const auto& money_wrapper = IO_Money::ReadData(Data["Money"]);
+    if (money_wrapper.has_value() == false)
+    {
+        AssertNoCrash("Can't get money from OneTimePayment data");
+        return {};
+    }
+
+    oneTimePayment.SetMoney(money_wrapper.value());
 
     return oneTimePayment;
 }
