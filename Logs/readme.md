@@ -1,0 +1,1 @@
+This file is versioned so that you can download the Logs folder while fetching the project from github

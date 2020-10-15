@@ -218,5 +218,8 @@
     <ClCompile Include="Code\Helper\PathOfExe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Logging\Logging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
