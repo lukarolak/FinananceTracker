@@ -21,6 +21,12 @@ unsigned int Time::GetTimeInSeconds() const
 	return m_hours*60*60 + m_minutes*60 + m_seconds;
 }
 
+std::string Time::GetTimeStamp() const
+{
+	Assert("Function not implemented");
+	return std::string();
+}
+
 bool Time::operator<(const Time& rhv) const
 {
 	if (m_hours < rhv.GetHours())

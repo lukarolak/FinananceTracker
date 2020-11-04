@@ -3,7 +3,7 @@
 #include <Error/Error.h>
 #include <rapidjson/document.h>
 #include <UserInfo/UserInfo.h>
-
+#include <Data/Time/DateTime.h>
 void PayPal::GetPayments()
 {
 	httplib::Client client("https://api.paypal.com");
@@ -16,6 +16,25 @@ void PayPal::GetPayments()
 	}
 
 	client.set_bearer_token_auth(token.value().c_str());
+
+	//For petlja, ide kroz mjesece, i stane u trenutku kada payment nije relevantan ~2010
+
+	auto currentDateTime = DateTime::GetCurrentDateTime();
+	{
+		Time time;
+		time.SetTime(0, 0, 0);
+		for (auto year = currentDateTime.GetDate().GetYear(); year >= 2010; year--)
+		{
+			for (auto month = eMonth::December; month >= eMonth::January; month--)
+			{
+				Date date;
+				date.SetDate(year, month, 1);
+				DateTime dateTime(date, time);
+				dateTime.GetTimeStamp();
+			}
+		}
+	}
+
 	auto reponse = client.Get("/v1/reporting/transactions?start_date=2010-09-20T20:10:00+0200&end_date=2020-10-19T20:10:00+0200");
 	if (reponse)
 	{

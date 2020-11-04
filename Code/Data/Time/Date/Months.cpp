@@ -17,6 +17,23 @@ eMonth operator++(eMonth& orig, int)
 	return rVal;
 }
 
+eMonth& operator--(eMonth& orig)
+{
+	if (orig == eMonth::January)
+	{
+		Assert("Can't decrement month");
+	}
+	orig = static_cast<eMonth>(static_cast<unsigned int>(orig) - 1);
+	return orig;
+}
+
+eMonth operator--(eMonth& orig, int)
+{
+	eMonth rVal = orig;
+	--orig;
+	return rVal;
+}
+
 eMonth operator-(const eMonth lhv, const unsigned int rhv)
 {
 	const unsigned int month = static_cast<unsigned int>(lhv) - rhv;

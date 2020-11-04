@@ -66,6 +66,11 @@ const Time& DateTime::GetTime() const
     return m_Time;
 }
 
+const std::string DateTime::GetTimeStamp() const
+{
+    return m_Date.GetTimeStamp() + "T" + m_Time.GetTimeStamp();
+}
+
 bool DateTime::operator<(const DateTime& rhv) const
 {
     if (m_Date < rhv.GetDate())

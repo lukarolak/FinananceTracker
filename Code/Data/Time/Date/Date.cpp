@@ -1,17 +1,17 @@
 #include <Data/Time/Date/Date.h>
 #include <Error/Error.h>
 
-auto Date::GetYear() const
+unsigned int Date::GetYear() const
 {
 	return m_year;
 }
 
-auto Date::GetMonth() const
+eMonth Date::GetMonth() const
 {
 	return m_month;
 }
 
-auto Date::GetDay() const
+unsigned int Date::GetDay() const
 {
 	return m_day;
 }
@@ -45,11 +45,20 @@ void Date::SetDate(const Date& DateIn)
 
 bool Date::SetDate(const unsigned int Year, const unsigned int Month, const unsigned int Day)
 {
+	if (ValidateMonthCorrectness(Month))
+	{
+		return SetDate(Year, static_cast<eMonth>(Month), Day);
+	}
+	return false;
+}
+
+bool Date::SetDate(const unsigned int Year, const eMonth Month, const unsigned int Day)
+{
 	bool success = false;
 	if (ValidateDateCorrectness(Year, Month, Day))
 	{
 		m_year = Year;
-		m_month = static_cast<eMonth>(Month);
+		m_month = Month;
 		m_day = Day;
 		success = true;
 	}
@@ -137,6 +146,14 @@ unsigned long long Date::GetDateInSeconds() const
 	return static_cast<unsigned long long>(dateInDays)*24*60*60;
 }
 
+std::string Date::GetTimeStamp() const
+{
+	Assert("Function not implemented");
+	std::string timestamp;
+	auto year = m_year;
+	return std::to_string(m_year) + "-" + std::to_string(m_month) + std::to_string(m_day);
+}
+
 constexpr unsigned int Date::GetAmountOfDaysInAYear(const unsigned int Year)
 {
 	unsigned int totalDays = 0;
@@ -218,10 +235,15 @@ constexpr bool Date::IsLeapYear(const unsigned int Year)
 
 bool Date::ValidateDateCorrectness(const unsigned int Year, const unsigned int Month, const unsigned int Day) const
 {
-	if (Month < static_cast<int>(eMonth::January) && Month > static_cast<int>(eMonth::December))
+	if(ValidateMonthCorrectness(Month) == false)
 		return false;
 
 	return ValidateDateCorrectness(Year, static_cast<eMonth>(Month), Day);
+}
+
+constexpr bool Date::ValidateMonthCorrectness(const unsigned int Month) const
+{
+	return Month >= static_cast<int>(eMonth::January) && Month <= static_cast<int>(eMonth::December);
 }
 
 bool Date::ValidateDateCorrectness(const unsigned int Year, const eMonth Month, const unsigned int Day) const

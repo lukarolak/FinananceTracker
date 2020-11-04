@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 class Time
 {
 public:
@@ -15,6 +15,7 @@ public:
 	auto GetMinutes() const;
 	auto GetSeconds() const;
 	unsigned int GetTimeInSeconds() const;
+	std::string GetTimeStamp() const;
 private:
 	bool ValidateTimeCorectness(const unsigned int Hours, const unsigned int Minutes, const unsigned int Seconds) const;
 

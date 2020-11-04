@@ -2,6 +2,7 @@
 #include <Data/Time/Date/Date.h>
 #include <Data/Time/Time/Time.h>
 #include <optional>
+#include <string>
 class DateTime
 {
 public:
@@ -17,6 +18,7 @@ public:
 	const unsigned long long GetDateTimeInSeconds() const;
 	const Date& GetDate() const;
 	const Time& GetTime() const;
+	const std::string GetTimeStamp() const;
 private:
 	Date m_Date;
 	Time m_Time;
