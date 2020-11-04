@@ -16,6 +16,26 @@ auto Date::GetDay() const
 	return m_day;
 }
 
+bool Date::operator<(const Date& rhv) const
+{
+	if (m_year < rhv.GetYear())
+	{
+		if (m_month < rhv.GetMonth())
+		{
+			if (m_day < rhv.GetDay())
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool Date::operator>(const Date& rhv) const
+{
+	return rhv < *this;
+}
+
 void Date::SetDate(const Date& DateIn)
 {
 	m_year = DateIn.GetYear();
@@ -36,65 +56,141 @@ bool Date::SetDate(const unsigned int Year, const unsigned int Month, const unsi
 	return success;
 }
 
-bool Date::ValidateDateCorrectness(const unsigned int Year, const unsigned int Month, const unsigned int Day) const
+void Date::SetDateInDays(unsigned int Days)
 {
-	if (Month < static_cast<int>(eMonth::January) && Month > static_cast<int>(eMonth::December))
-		return false;
-
-	unsigned int dayInAMonth = 0;
-
-	switch (static_cast<eMonth>(Month))
+	unsigned int year = 0;
+	int daysStrippedOfYears = Days;
+	bool strippingYears = false;
+	do
 	{
-	case eMonth::January:
-		dayInAMonth = 31;
-		break;
-	case eMonth::February:
-		if (IsLeapYear(Year))
-			dayInAMonth = 28;
+		strippingYears = false;
+		if (IsLeapYear(year))
+		{
+			if (daysStrippedOfYears - 366 > 0)
+			{
+				strippingYears = true;
+				daysStrippedOfYears -= 366;
+				year++;
+			}
+		}
 		else
-			dayInAMonth = 29;
-		break;
-	case eMonth::March:
-		dayInAMonth = 31;
-		break;
-	case eMonth::April:
-		dayInAMonth = 30;
-		break;
-	case eMonth::May:
-		dayInAMonth = 31;
-		break;
-	case eMonth::June:
-		dayInAMonth = 30;
-		break;
-	case eMonth::July:
-		dayInAMonth = 31;
-		break;
-	case eMonth::August:
-		dayInAMonth = 31;
-		break;
-	case eMonth::September:
-		dayInAMonth = 30;
-		break;
-	case eMonth::October:
-		dayInAMonth = 31;
-		break;
-	case eMonth::November:
-		dayInAMonth = 30;
-		break;
-	case eMonth::December:
-		dayInAMonth = 31;
-		break;
-	default:
-		AssertNoCrash("InvalidMonth");
-		dayInAMonth = 0;
-		break;
+		{
+			if (daysStrippedOfYears - 365 > 0)
+			{
+				strippingYears = true;
+				daysStrippedOfYears -= 365;
+				year++;
+			}
+		}
+	} while (strippingYears);
+
+	m_year = year;
+
+	eMonth month = eMonth::January;
+	bool strippingMonths = false;
+	int daysStrippedOfYearsAndMonths = daysStrippedOfYears;
+	do
+	{
+		strippingMonths = false;
+		const auto& amountOfDaysInAMonth = GetAmountOfDaysInAMonth(m_year, month);
+		if (daysStrippedOfYearsAndMonths - static_cast<int>(amountOfDaysInAMonth) > 0)
+		{
+			daysStrippedOfYearsAndMonths -= amountOfDaysInAMonth;
+			strippingMonths = true;
+			month++;
+		}
+	} while (strippingMonths);
+
+	m_month = month;
+	m_day = daysStrippedOfYearsAndMonths;
+
+	if (ValidateDateCorrectness(m_year, m_month, m_day) == false)
+	{
+		Assert("Can't conver days into Date");
 	}
 
-	const bool DayWithinMaximumDaysInAMonth = dayInAMonth >= Day;
-	return DayWithinMaximumDaysInAMonth;
 }
 
-bool Date::IsLeapYear(const unsigned int Year) const
+void Date::AddDateInDays(const unsigned int Days)
+{
+	SetDateInDays(GetDateInDays() + Days);
+}
+
+unsigned int Date::GetDateInDays() const
+{
+	unsigned int totalDays = 0;
+	totalDays = GetAmountOfDaysInAYear(m_year - 1);
+	if (m_month > eMonth::January)
+	{
+		for (eMonth month = eMonth::January; month <= m_month - 1; month++)
+		{
+			totalDays += GetAmountOfDaysInAMonth(m_year, month);
+		}
+	}
+	totalDays += m_day;
+	return totalDays;
+}
+
+unsigned long long Date::GetDateInSeconds() const
+{
+	const auto dateInDays = GetDateInDays();
+	return static_cast<unsigned long long>(dateInDays)*24*60*60;
+}
+
+constexpr unsigned int Date::GetAmountOfDaysInAYear(const unsigned int Year)
+{
+	unsigned int totalDays = 0;
+	for (unsigned int year = 0; year <= Year; year++)
+	{
+		for (eMonth month = eMonth::January; month < eMonth::December; month++)
+		{
+			totalDays += GetAmountOfDaysInAMonth(year, month);
+		}
+		totalDays += GetAmountOfDaysInAMonth(year, eMonth::December);
+		//Can't convert the if condition into <=, as I can't increment month enum over December
+	}
+
+	return totalDays;
+}
+
+constexpr unsigned int Date::GetAmountOfDaysInAMonth(const unsigned int Year, const eMonth Month)
+{
+	switch (Month)
+	{
+	case eMonth::January:
+		return 31;
+	case eMonth::February:
+		if (IsLeapYear(Year))
+			return 29;
+		else
+			return 28;
+	case eMonth::March:
+		return 31;
+	case eMonth::April:
+		return 30;
+	case eMonth::May:
+		return 31;
+	case eMonth::June:
+		return 30;
+	case eMonth::July:
+		return 31;
+	case eMonth::August:
+		return 31;
+	case eMonth::September:
+		return 30;
+	case eMonth::October:
+		return 31;
+	case eMonth::November:
+		return 30;
+	case eMonth::December:
+		return 31;
+	default:
+		Assert("Invalid Month");
+		return 0;
+	}
+}
+
+constexpr bool Date::IsLeapYear(const unsigned int Year)
 {
 	if (Year % 4 == 0)
 	{
@@ -118,4 +214,20 @@ bool Date::IsLeapYear(const unsigned int Year) const
 	{
 		return false;
 	}
+}
+
+bool Date::ValidateDateCorrectness(const unsigned int Year, const unsigned int Month, const unsigned int Day) const
+{
+	if (Month < static_cast<int>(eMonth::January) && Month > static_cast<int>(eMonth::December))
+		return false;
+
+	return ValidateDateCorrectness(Year, static_cast<eMonth>(Month), Day);
+}
+
+bool Date::ValidateDateCorrectness(const unsigned int Year, const eMonth Month, const unsigned int Day) const
+{
+	const auto& daysInAMonth = GetAmountOfDaysInAMonth(Year, Month);
+	const bool DayWithinMaximumDaysInAMonth = daysInAMonth >= Day;
+
+	return DayWithinMaximumDaysInAMonth;
 }

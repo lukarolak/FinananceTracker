@@ -19,76 +19,221 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\API\rapidjson\allocators.h" />
-    <ClInclude Include="Code\API\rapidjson\cursorstreamwrapper.h" />
-    <ClInclude Include="Code\API\rapidjson\document.h" />
-    <ClInclude Include="Code\API\rapidjson\encodedstream.h" />
-    <ClInclude Include="Code\API\rapidjson\encodings.h" />
-    <ClInclude Include="Code\API\rapidjson\error\en.h" />
-    <ClInclude Include="Code\API\rapidjson\error\error.h" />
-    <ClInclude Include="Code\API\rapidjson\filereadstream.h" />
-    <ClInclude Include="Code\API\rapidjson\filewritestream.h" />
-    <ClInclude Include="Code\API\rapidjson\fwd.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\biginteger.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\clzll.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\diyfp.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\dtoa.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\ieee754.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\itoa.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\meta.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\pow10.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\regex.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\stack.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\strfunc.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\strtod.h" />
-    <ClInclude Include="Code\API\rapidjson\internal\swap.h" />
-    <ClInclude Include="Code\API\rapidjson\istreamwrapper.h" />
-    <ClInclude Include="Code\API\rapidjson\memorybuffer.h" />
-    <ClInclude Include="Code\API\rapidjson\memorystream.h" />
-    <ClInclude Include="Code\API\rapidjson\msinttypes\inttypes.h" />
-    <ClInclude Include="Code\API\rapidjson\msinttypes\stdint.h" />
-    <ClInclude Include="Code\API\rapidjson\ostreamwrapper.h" />
-    <ClInclude Include="Code\API\rapidjson\pointer.h" />
-    <ClInclude Include="Code\API\rapidjson\prettywriter.h" />
-    <ClInclude Include="Code\API\rapidjson\rapidjson.h" />
-    <ClInclude Include="Code\API\rapidjson\reader.h" />
-    <ClInclude Include="Code\API\rapidjson\schema.h" />
-    <ClInclude Include="Code\API\rapidjson\stream.h" />
-    <ClInclude Include="Code\API\rapidjson\stringbuffer.h" />
-    <ClInclude Include="Code\API\rapidjson\writer.h" />
+    <ClInclude Include="Code\API\http\cpp-httplib\httplib.h" />
     <ClInclude Include="Code\Data\Money\IO\IO_Money.h" />
     <ClInclude Include="Code\Data\Money\Money.h" />
     <ClInclude Include="Code\Data\Payment\OneTimePayment\IO\IO_OneTimePayment.h" />
     <ClInclude Include="Code\Data\Payment\OneTimePayment\OneTimePayment.h" />
     <ClInclude Include="Code\Data\Price\Currency\Currency.h" />
+    <ClInclude Include="Code\Data\Time\DateTime.h" />
     <ClInclude Include="Code\Data\Time\Date\Date.h" />
     <ClInclude Include="Code\Data\Time\Date\IO\IO_Date.h" />
     <ClInclude Include="Code\Data\Time\Date\Months.h" />
     <ClInclude Include="Code\Data\Time\Time\IO\IO_Time.h" />
     <ClInclude Include="Code\Data\Time\Time\Time.h" />
     <ClInclude Include="Code\Error\Error.h" />
-    <ClInclude Include="Code\FileIO\JsonReader.h" />
+    <ClInclude Include="Code\FetchDataFromWeb\AuthorizationToken.h" />
+    <ClInclude Include="Code\FetchDataFromWeb\PayPal\PayPal.h" />
+    <ClInclude Include="Code\FileIO\JsonIO.h" />
     <ClInclude Include="Code\Helper\CharToInt.h" />
     <ClInclude Include="Code\Helper\PathOfExe.h" />
     <ClInclude Include="Code\Logging\Logging.h" />
+    <ClInclude Include="Code\Tests\FetchDataFromPayPal\FetchDataFromPaypalTest.h" />
     <ClInclude Include="Code\Tests\ReadOneTimePayment\ReadOneTimePayment.h" />
     <ClInclude Include="Code\Tests\Tests.h" />
+    <ClInclude Include="Code\UserInfo\UserInfo.h" />
+    <ClInclude Include="External\httplib\httplib.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\aes.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\asn1.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\asn1err.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\asn1t.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\asn1_mac.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\async.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\asyncerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\bio.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\bioerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\blowfish.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\bn.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\bnerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\buffer.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\buffererr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\camellia.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cast.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cmac.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cmp.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cmperr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cmp_util.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cms.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cmserr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\comp.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\comperr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\conf.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\conferr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\configuration.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\conf_api.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\core.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\core_dispatch.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\core_names.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\core_object.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\crmf.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\crmferr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\crypto.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cryptoerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ct.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\cterr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\decoder.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\decodererr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\des.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\dh.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\dherr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\dsa.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\dsaerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\dtls1.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ebcdic.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ec.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ecdh.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ecdsa.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ecerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\encoder.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\encodererr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\engine.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\engineerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\err.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ess.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\esserr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\evp.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\evperr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\e_os2.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\fipskey.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\fips_names.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\hmac.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\http.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\httperr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\idea.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\kdf.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\kdferr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\lhash.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\macros.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\md2.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\md4.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\md5.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\mdc2.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\modes.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\objects.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\objectserr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\obj_mac.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ocsp.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ocsperr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\opensslconf.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\opensslv.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ossl_typ.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\params.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\param_build.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\pem.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\pem2.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\pemerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\pkcs12.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\pkcs12err.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\pkcs7.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\pkcs7err.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\provider.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\rand.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\randerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\rc2.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\rc4.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\rc5.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ripemd.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\rsa.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\rsaerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\safestack.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\seed.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\self_test.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\sha.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\srp.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\srtp.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ssl.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ssl2.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ssl3.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\sslerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\stack.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\store.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\storeerr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\symhacks.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\tls1.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\trace.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ts.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\tserr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\txt_db.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\types.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\ui.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\uierr.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\whrlpool.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\x509.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\x509err.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\x509v3.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\x509v3err.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\x509_vfy.h" />
+    <ClInclude Include="External\OpenSSL\include\openssl\__DECC_INCLUDE_EPILOGUE.H" />
+    <ClInclude Include="External\OpenSSL\include\openssl\__DECC_INCLUDE_PROLOGUE.H" />
+    <ClInclude Include="External\rapidjson\allocators.h" />
+    <ClInclude Include="External\rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="External\rapidjson\document.h" />
+    <ClInclude Include="External\rapidjson\encodedstream.h" />
+    <ClInclude Include="External\rapidjson\encodings.h" />
+    <ClInclude Include="External\rapidjson\error\en.h" />
+    <ClInclude Include="External\rapidjson\error\error.h" />
+    <ClInclude Include="External\rapidjson\filereadstream.h" />
+    <ClInclude Include="External\rapidjson\filewritestream.h" />
+    <ClInclude Include="External\rapidjson\fwd.h" />
+    <ClInclude Include="External\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="External\rapidjson\internal\clzll.h" />
+    <ClInclude Include="External\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="External\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="External\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="External\rapidjson\internal\itoa.h" />
+    <ClInclude Include="External\rapidjson\internal\meta.h" />
+    <ClInclude Include="External\rapidjson\internal\pow10.h" />
+    <ClInclude Include="External\rapidjson\internal\regex.h" />
+    <ClInclude Include="External\rapidjson\internal\stack.h" />
+    <ClInclude Include="External\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="External\rapidjson\internal\strtod.h" />
+    <ClInclude Include="External\rapidjson\internal\swap.h" />
+    <ClInclude Include="External\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="External\rapidjson\memorybuffer.h" />
+    <ClInclude Include="External\rapidjson\memorystream.h" />
+    <ClInclude Include="External\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="External\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="External\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="External\rapidjson\pointer.h" />
+    <ClInclude Include="External\rapidjson\prettywriter.h" />
+    <ClInclude Include="External\rapidjson\rapidjson.h" />
+    <ClInclude Include="External\rapidjson\reader.h" />
+    <ClInclude Include="External\rapidjson\schema.h" />
+    <ClInclude Include="External\rapidjson\stream.h" />
+    <ClInclude Include="External\rapidjson\stringbuffer.h" />
+    <ClInclude Include="External\rapidjson\writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Data\Money\IO\IO_Money.cpp" />
     <ClCompile Include="Code\Data\Money\Money.cpp" />
     <ClCompile Include="Code\Data\Payment\OneTimePayment\IO\IO_OneTimePayment.cpp" />
     <ClCompile Include="Code\Data\Payment\OneTimePayment\OneTimePayment.cpp" />
+    <ClCompile Include="Code\Data\Time\DateTime.cpp" />
     <ClCompile Include="Code\Data\Time\Date\Date.cpp" />
     <ClCompile Include="Code\Data\Time\Date\IO\IO_Date.cpp" />
+    <ClCompile Include="Code\Data\Time\Date\Months.cpp" />
     <ClCompile Include="Code\Data\Time\Time\IO\IO_Time.cpp" />
     <ClCompile Include="Code\Data\Time\Time\Time.cpp" />
+    <ClCompile Include="Code\FetchDataFromWeb\AuthorizationToken.cpp" />
+    <ClCompile Include="Code\FetchDataFromWeb\PayPal\PayPal.cpp" />
     <ClCompile Include="Code\FinananceTracker.cpp" />
     <ClCompile Include="Code\Helper\CharToInt.cpp" />
     <ClCompile Include="Code\Helper\PathOfExe.cpp" />
     <ClCompile Include="Code\Logging\Logging.cpp" />
+    <ClCompile Include="Code\Tests\FetchDataFromPayPal\FetchDataFromPaypalTest.cpp" />
     <ClCompile Include="Code\Tests\ReadOneTimePayment\ReadOneTimePayment.cpp" />
     <ClCompile Include="Code\Tests\Tests.cpp" />
+    <ClCompile Include="Code\UserInfo\UserInfo.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -160,12 +305,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Code\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\OpenSSL\include\;$(ProjectDir)External\;$(ProjectDir)Code\;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libssl.lib;libcrypto.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\OpenSSL\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -176,7 +323,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Code\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\OpenSSL\include\;$(ProjectDir)External\;$(ProjectDir)Code\;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -184,6 +331,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libssl.lib;libcrypto.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\OpenSSL\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -192,12 +341,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Code\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\OpenSSL\include\;$(ProjectDir)External\;$(ProjectDir)Code\;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libssl.lib;libcrypto.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\OpenSSL\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -208,7 +359,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Code\;$(ProjectDir)\Code\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\OpenSSL\include\;$(ProjectDir)External\;$(ProjectDir)Code\;$(ProjectDir)\Code\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -216,6 +367,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libssl.lib;libcrypto.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\OpenSSL\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

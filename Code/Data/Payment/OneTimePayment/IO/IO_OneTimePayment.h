@@ -1,7 +1,7 @@
 #pragma once
 #include <Data/Payment/OneTimePayment/OneTimePayment.h>
 #include <string>
-#include <FileIO/JsonReader.h>
+#include <FileIO/JsonIO.h>
 #include <optional>
 
 namespace IO_OneTimePayment

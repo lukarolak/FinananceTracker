@@ -4,8 +4,6 @@
 
 ExePath ExePathInstance;
 
-
-
 ExePath& GetExePathInstance()
 {
     return ExePathInstance;

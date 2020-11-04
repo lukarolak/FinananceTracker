@@ -1,5 +1,4 @@
 #pragma once
-
 enum class eMonth
 {
 	January,
@@ -15,3 +14,11 @@ enum class eMonth
 	November,
 	December
 };
+
+// prefix (++my_month)
+eMonth& operator++(eMonth& orig);
+
+// postfix (my_month++)
+eMonth operator++(eMonth& orig, int);
+
+eMonth operator-(const eMonth lhv, const unsigned int rhv);

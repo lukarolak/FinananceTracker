@@ -14,7 +14,9 @@ public:
 			OpenStream();
 
 		if (Logging::myfile.is_open())
+		{
 			Logging::myfile << Msg << std::endl;
+		}
 	}
 	static Logging& GetInstance();
 private:

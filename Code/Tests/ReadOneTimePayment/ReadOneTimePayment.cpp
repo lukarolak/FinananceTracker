@@ -1,5 +1,5 @@
 #include <Tests/ReadOneTimePayment/ReadOneTimePayment.h>
-#include <FileIO/JsonReader.h>
+#include <FileIO/JsonIO.h>
 #include <Error/Error.h>
 #include <Data/Payment/OneTimePayment/IO/IO_OneTimePayment.h>
 #include <Helper/PathOfExe.h>
