@@ -23,8 +23,14 @@ unsigned int Time::GetTimeInSeconds() const
 
 std::string Time::GetTimeStamp() const
 {
-	Assert("Function not implemented");
-	return std::string();
+	std::string timestamp;
+	timestamp.append(ConvertToString(m_hours));
+	timestamp.append(":");
+	timestamp.append(ConvertToString(m_minutes));
+	timestamp.append(":");
+	timestamp.append(ConvertToString(m_seconds));
+
+	return timestamp;
 }
 
 bool Time::operator<(const Time& rhv) const
@@ -98,4 +104,17 @@ bool Time::ValidateTimeCorectness(const unsigned int Hours, const unsigned int M
 		return false;
 
 	return true;
+}
+
+std::string Time::ConvertToString(unsigned int number) const
+{
+	std::string text;
+	for (int i = 1; i >= 0; i--)
+	{
+		if (m_hours < i * 10)
+		{
+			text.append("0");
+		}
+	}
+	text.append(std::to_string(m_hours));
 }

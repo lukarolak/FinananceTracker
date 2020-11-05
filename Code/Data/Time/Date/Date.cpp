@@ -148,10 +148,29 @@ unsigned long long Date::GetDateInSeconds() const
 
 std::string Date::GetTimeStamp() const
 {
-	Assert("Function not implemented");
 	std::string timestamp;
-	auto year = m_year;
-	return std::to_string(m_year) + "-" + std::to_string(m_month) + std::to_string(m_day);
+
+	for (int i = 3; i >= 0; i--)
+	{
+		if (m_year < i * 10)
+		{
+			timestamp.append("0");
+		}
+	}
+	timestamp.append(std::to_string(m_year));
+	timestamp.append("-");
+	timestamp.append(std::to_string(m_month));
+	timestamp.append("-");
+	for (int i = 1; i >= 0; i--)
+	{
+		if (m_day < i * 10)
+		{
+			timestamp.append("0");
+		}
+	}
+	timestamp.append(std::to_string(m_day));
+
+	return timestamp;
 }
 
 constexpr unsigned int Date::GetAmountOfDaysInAYear(const unsigned int Year)

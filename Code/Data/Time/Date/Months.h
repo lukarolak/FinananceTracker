@@ -20,7 +20,13 @@ namespace std
 {
 	inline std::string to_string(const eMonth Month)
 	{
-		return std::to_string(static_cast<const unsigned int>(Month));
+		std::string monthInString;
+		if (Month >= eMonth::January && Month<= eMonth::October)
+		{
+			monthInString.append("0");
+		}
+		monthInString.append(std::to_string(static_cast<const unsigned int>(Month)));
+		return monthInString;
 	}
 }
 

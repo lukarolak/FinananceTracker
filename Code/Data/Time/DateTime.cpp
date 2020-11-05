@@ -68,7 +68,7 @@ const Time& DateTime::GetTime() const
 
 const std::string DateTime::GetTimeStamp() const
 {
-    return m_Date.GetTimeStamp() + "T" + m_Time.GetTimeStamp();
+    return m_Date.GetTimeStamp() + "T" + m_Time.GetTimeStamp() + "+0000";
 }
 
 bool DateTime::operator<(const DateTime& rhv) const

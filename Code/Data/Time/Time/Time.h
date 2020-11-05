@@ -18,7 +18,7 @@ public:
 	std::string GetTimeStamp() const;
 private:
 	bool ValidateTimeCorectness(const unsigned int Hours, const unsigned int Minutes, const unsigned int Seconds) const;
-
+	std::string ConvertToString(unsigned int number) const;
 	unsigned int m_hours = 0;
 	unsigned int m_minutes = 0;
 	unsigned int m_seconds = 0;
