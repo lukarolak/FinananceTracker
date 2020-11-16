@@ -117,4 +117,5 @@ std::string Time::ConvertToString(unsigned int number) const
 		}
 	}
 	text.append(std::to_string(m_hours));
+	return text;
 }

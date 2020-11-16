@@ -1,43 +1,59 @@
 #include <FetchDataFromWeb/PayPal/PayPal.h>
-#include <httplib/httplib.h>
 #include <Error/Error.h>
-#include <rapidjson/document.h>
 #include <UserInfo/UserInfo.h>
 #include <Data/Time/DateTime.h>
+
+PayPal::PayPal()
+	: m_PayPalClient("https://api.paypal.com")
+{
+}
+
 void PayPal::GetPayments()
 {
-	httplib::Client client("https://api.paypal.com");
-
-	const auto& token = m_AuthorizationTicket.GetToken();
-	if (token.has_value() == false)
-	{
-		AssertNoCrash("Can't get authorization token");
-		return;
-	}
-
-	client.set_bearer_token_auth(token.value().c_str());
-
-	Assert("Sadasnji mjesec ima bug");
-
 	auto currentDateTime = DateTime::GetCurrentDateTime();
 	
 	Time time;
 	time.SetTime(0, 0, 0);
 
 	Date date; 
-	date.SetDate(currentDateTime.GetDate().GetYear(), currentDateTime.GetDate().GetMonth() - 1, 20);
+	date.SetDate(currentDateTime.GetDate().GetYear(), currentDateTime.GetDate().GetMonth(), 1);
 	DateTime startDate(date, time);
 
-	std::string getRequest = "/v1/reporting/transactions?start_date="+startDate.GetTimeStamp()+"&end_date=" + currentDateTime.GetTimeStamp();
-	auto reponse = client.Get(getRequest.c_str());
+	GetPayments(startDate, currentDateTime);
+}
+
+void PayPal::Initialize()
+{
+	InitializePayPalClient();
+}
+
+std::optional<rapidjson::Document> PayPal::GetPayments(const DateTime& StartDate, const DateTime& EndDate)
+{
+	std::string getRequest = "/v1/reporting/transactions?start_date=" + StartDate.GetTimeStamp() + "&end_date=" + EndDate.GetTimeStamp();
+	auto reponse = m_PayPalClient.Get(getRequest.c_str());
 	if (reponse)
 	{
 		auto text = reponse->body;
+		rapidjson::Document document;
+		document.Parse(text);
+		return document;
 	}
 	else
 	{
 		AssertNoCrash("No response from PayPal API");
 	}
+	return {};
+}
+
+void PayPal::InitializePayPalClient()
+{
+	const auto& token = m_AuthorizationTicket.GetToken();
+	if (token.has_value() == false)
+	{
+		AssertNoCrash("Can't get authorization token");
+		return;
+	}
+	m_PayPalClient.set_bearer_token_auth(token.value().c_str());
 }
 
 const std::optional<PayPal::PayPalAuthorizationTicket::AuthorizationTokenData> PayPal::PayPalAuthorizationTicket::GetAuthorizationToken() const
@@ -49,7 +65,7 @@ const std::optional<PayPal::PayPalAuthorizationTicket::AuthorizationTokenData> P
 	{
 		AssertNoCrash("PayPal user info not set");
 		return {};
-	
+
 	}
 
 	const auto& clientID = payPalInfo.GetUsername();

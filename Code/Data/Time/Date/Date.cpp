@@ -268,7 +268,12 @@ constexpr bool Date::ValidateMonthCorrectness(const unsigned int Month) const
 bool Date::ValidateDateCorrectness(const unsigned int Year, const eMonth Month, const unsigned int Day) const
 {
 	const auto& daysInAMonth = GetAmountOfDaysInAMonth(Year, Month);
-	const bool DayWithinMaximumDaysInAMonth = daysInAMonth >= Day;
 
-	return DayWithinMaximumDaysInAMonth;
+	if (daysInAMonth < Day)
+		return false;
+
+	if (Day <= 0)
+		return false;
+
+	return true;
 }

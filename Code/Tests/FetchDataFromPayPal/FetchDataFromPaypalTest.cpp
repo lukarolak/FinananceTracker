@@ -3,6 +3,7 @@
 bool FetchDataFromPaypalTest()
 {
     PayPal payPal;
+    payPal.Initialize();
     payPal.GetPayments();
     return false;
 }
