@@ -2,24 +2,55 @@
 #include <Error/Error.h>
 #include <UserInfo/UserInfo.h>
 #include <Data/Time/DateTime.h>
+#include <Data/Time/Utilities/DateTimeUtilities.h>
 
 PayPal::PayPal()
 	: m_PayPalClient("https://api.paypal.com")
 {
 }
 
-void PayPal::GetPayments()
+std::vector<rapidjson::Document> PayPal::GetPayments()
 {
-	auto currentDateTime = DateTime::GetCurrentDateTime();
+	std::vector<rapidjson::Document> payments;
+
+	auto endTime = DateTime::GetCurrentDateTime();
 	
 	Time time;
 	time.SetTime(0, 0, 0);
 
 	Date date; 
-	date.SetDate(currentDateTime.GetDate().GetYear(), currentDateTime.GetDate().GetMonth(), 1);
+	date.SetDate(endTime.GetDate().GetYear(), endTime.GetDate().GetMonth(), 1);
 	DateTime startDate(date, time);
+	
+	bool noPaymentRecieved = false;
+	do
+	{
+		auto payment = GetPayments(startDate, endTime);
+		if (payment.has_value())
+		{
+			if (payment.value().MemberCount() == 0)
+			{
+				noPaymentRecieved = true;
+			}
+			else
+			{
+				payments.resize(payments.size() + 1);
+				payments.back().CopyFrom(payment.value(), payment.value().GetAllocator(), true);
+			}
+		}
+		else
+		{
+			AssertNoCrash("Can't obtain payments");
+		}
+		
+		endTime = startDate;
 
-	GetPayments(startDate, currentDateTime);
+		const auto& startDateDate = startDate.GetDate();
+		startDate = TimeUtilities::ReduceByDays(startDate, 28);
+
+	} while (noPaymentRecieved == false);
+
+	return payments;
 }
 
 void PayPal::Initialize()
@@ -31,7 +62,7 @@ std::optional<rapidjson::Document> PayPal::GetPayments(const DateTime& StartDate
 {
 	std::string getRequest = "/v1/reporting/transactions?start_date=" + StartDate.GetTimeStamp() + "&end_date=" + EndDate.GetTimeStamp();
 	auto reponse = m_PayPalClient.Get(getRequest.c_str());
-	if (reponse)
+	if (reponse.error() == httplib::Error::Success)
 	{
 		auto text = reponse->body;
 		rapidjson::Document document;
@@ -40,7 +71,7 @@ std::optional<rapidjson::Document> PayPal::GetPayments(const DateTime& StartDate
 	}
 	else
 	{
-		AssertNoCrash("No response from PayPal API");
+		AssertNoCrash("API call did not return success");
 	}
 	return {};
 }

@@ -29,8 +29,10 @@
     <ClInclude Include="Code\Data\Time\Date\Date.h" />
     <ClInclude Include="Code\Data\Time\Date\IO\IO_Date.h" />
     <ClInclude Include="Code\Data\Time\Date\Months.h" />
+    <ClInclude Include="Code\Data\Time\Date\Utilities\DateUtilities.h" />
     <ClInclude Include="Code\Data\Time\Time\IO\IO_Time.h" />
     <ClInclude Include="Code\Data\Time\Time\Time.h" />
+    <ClInclude Include="Code\Data\Time\Utilities\DateTimeUtilities.h" />
     <ClInclude Include="Code\Error\Error.h" />
     <ClInclude Include="Code\FetchDataFromWeb\AuthorizationToken.h" />
     <ClInclude Include="Code\FetchDataFromWeb\PayPal\PayPal.h" />
@@ -222,8 +224,10 @@
     <ClCompile Include="Code\Data\Time\Date\Date.cpp" />
     <ClCompile Include="Code\Data\Time\Date\IO\IO_Date.cpp" />
     <ClCompile Include="Code\Data\Time\Date\Months.cpp" />
+    <ClCompile Include="Code\Data\Time\Date\Utilities\DateUtilities.cpp" />
     <ClCompile Include="Code\Data\Time\Time\IO\IO_Time.cpp" />
     <ClCompile Include="Code\Data\Time\Time\Time.cpp" />
+    <ClCompile Include="Code\Data\Time\Utilities\DateTimeUtilities.cpp" />
     <ClCompile Include="Code\FetchDataFromWeb\AuthorizationToken.cpp" />
     <ClCompile Include="Code\FetchDataFromWeb\PayPal\PayPal.cpp" />
     <ClCompile Include="Code\FinananceTracker.cpp" />

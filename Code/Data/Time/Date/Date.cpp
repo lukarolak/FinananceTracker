@@ -11,9 +11,14 @@ eMonth Date::GetMonth() const
 	return m_month;
 }
 
-unsigned int Date::GetDay() const
+dateDay Date::GetDay() const
 {
 	return m_day;
+}
+
+Date::Date(const dateYear m_year, const eMonth m_month, const dateDay m_day)
+{
+	this->SetDate(m_year, m_month, m_day);
 }
 
 bool Date::operator<(const Date& rhv) const
@@ -36,6 +41,14 @@ bool Date::operator>(const Date& rhv) const
 	return rhv < *this;
 }
 
+Date& Date::operator=(const Date& rhv)
+{
+	m_year = rhv.GetYear();
+	m_month = rhv.GetMonth();
+	m_day = rhv.GetDay();
+	return *this;
+}
+
 void Date::SetDate(const Date& DateIn)
 {
 	m_year = DateIn.GetYear();
@@ -43,7 +56,7 @@ void Date::SetDate(const Date& DateIn)
 	m_day = DateIn.GetDay();
 }
 
-bool Date::SetDate(const unsigned int Year, const unsigned int Month, const unsigned int Day)
+bool Date::SetDate(const dateYear Year, const unsigned int Month, const dateDay Day)
 {
 	if (ValidateMonthCorrectness(Month))
 	{
@@ -52,7 +65,7 @@ bool Date::SetDate(const unsigned int Year, const unsigned int Month, const unsi
 	return false;
 }
 
-bool Date::SetDate(const unsigned int Year, const eMonth Month, const unsigned int Day)
+bool Date::SetDate(const dateYear Year, const eMonth Month, const dateDay Day)
 {
 	bool success = false;
 	if (ValidateDateCorrectness(Year, Month, Day))
@@ -65,7 +78,7 @@ bool Date::SetDate(const unsigned int Year, const eMonth Month, const unsigned i
 	return success;
 }
 
-void Date::SetDateInDays(unsigned int Days)
+void Date::SetDateInDays(dateDay Days)
 {
 	unsigned int year = 0;
 	int daysStrippedOfYears = Days;
@@ -120,12 +133,12 @@ void Date::SetDateInDays(unsigned int Days)
 
 }
 
-void Date::AddDateInDays(const unsigned int Days)
+void Date::AddDateInDays(const dateDay Days)
 {
 	SetDateInDays(GetDateInDays() + Days);
 }
 
-unsigned int Date::GetDateInDays() const
+dateDay Date::GetDateInDays() const
 {
 	unsigned int totalDays = 0;
 	totalDays = GetAmountOfDaysInAYear(m_year - 1);
@@ -152,7 +165,7 @@ std::string Date::GetTimeStamp() const
 
 	for (int i = 3; i >= 0; i--)
 	{
-		if (m_year < i * 10)
+		if (static_cast<int>(m_year) < i * 10)
 		{
 			timestamp.append("0");
 		}
@@ -163,7 +176,7 @@ std::string Date::GetTimeStamp() const
 	timestamp.append("-");
 	for (int i = 1; i >= 0; i--)
 	{
-		if (m_day < i * 10)
+		if (static_cast<int>(m_day) < i * 10)
 		{
 			timestamp.append("0");
 		}
@@ -173,9 +186,9 @@ std::string Date::GetTimeStamp() const
 	return timestamp;
 }
 
-constexpr unsigned int Date::GetAmountOfDaysInAYear(const unsigned int Year)
+constexpr dateDay Date::GetAmountOfDaysInAYear(const dateYear Year)
 {
-	unsigned int totalDays = 0;
+	dateDay totalDays = 0;
 	for (unsigned int year = 0; year <= Year; year++)
 	{
 		for (eMonth month = eMonth::January; month < eMonth::December; month++)
@@ -189,7 +202,7 @@ constexpr unsigned int Date::GetAmountOfDaysInAYear(const unsigned int Year)
 	return totalDays;
 }
 
-constexpr unsigned int Date::GetAmountOfDaysInAMonth(const unsigned int Year, const eMonth Month)
+constexpr dateDay Date::GetAmountOfDaysInAMonth(const dateYear Year, const eMonth Month)
 {
 	switch (Month)
 	{
@@ -226,7 +239,7 @@ constexpr unsigned int Date::GetAmountOfDaysInAMonth(const unsigned int Year, co
 	}
 }
 
-constexpr bool Date::IsLeapYear(const unsigned int Year)
+constexpr bool Date::IsLeapYear(const dateYear Year)
 {
 	if (Year % 4 == 0)
 	{
@@ -252,7 +265,7 @@ constexpr bool Date::IsLeapYear(const unsigned int Year)
 	}
 }
 
-bool Date::ValidateDateCorrectness(const unsigned int Year, const unsigned int Month, const unsigned int Day) const
+bool Date::ValidateDateCorrectness(const dateYear Year, const unsigned int Month, const dateDay Day) const
 {
 	if(ValidateMonthCorrectness(Month) == false)
 		return false;
@@ -265,7 +278,7 @@ constexpr bool Date::ValidateMonthCorrectness(const unsigned int Month) const
 	return Month >= static_cast<int>(eMonth::January) && Month <= static_cast<int>(eMonth::December);
 }
 
-bool Date::ValidateDateCorrectness(const unsigned int Year, const eMonth Month, const unsigned int Day) const
+bool Date::ValidateDateCorrectness(const dateYear Year, const eMonth Month, const dateDay Day) const
 {
 	const auto& daysInAMonth = GetAmountOfDaysInAMonth(Year, Month);
 

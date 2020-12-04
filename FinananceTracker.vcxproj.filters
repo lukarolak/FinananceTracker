@@ -594,6 +594,12 @@
     <ClInclude Include="Code\FileIO\JsonIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Data\Time\Utilities\DateTimeUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Data\Time\Date\Utilities\DateUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Data\Time\Date\Date.cpp">
@@ -654,6 +660,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\UserInfo\UserInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Data\Time\Utilities\DateTimeUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Data\Time\Date\Utilities\DateUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

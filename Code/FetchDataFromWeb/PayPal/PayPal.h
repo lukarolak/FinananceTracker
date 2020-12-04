@@ -8,7 +8,7 @@ class PayPal
 {
 public:
 	PayPal();
-	void GetPayments();
+	std::vector<rapidjson::Document> GetPayments();
 	void Initialize();
 private:
 	std::optional<rapidjson::Document> GetPayments(const DateTime& StartDate, const DateTime& EndDate);

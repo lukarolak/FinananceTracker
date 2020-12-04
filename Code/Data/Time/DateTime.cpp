@@ -22,6 +22,12 @@ void DateTime::SetDateTimeInSeconds(const unsigned long long Seconds)
     m_Time.SetTimeInSeconds(Seconds % secondsInADay);
 }
 
+void DateTime::SetDateTimeInDays(const dateDay DayAmount)
+{
+    m_Date.SetDateInDays(DayAmount);
+    m_Time.SetTime(0, 0, 0);
+}
+
 const DateTime DateTime::GetCurrentDateTime()
 {
     const auto currentTime = std::chrono::system_clock::now();

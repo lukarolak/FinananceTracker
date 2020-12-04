@@ -111,7 +111,7 @@ std::string Time::ConvertToString(unsigned int number) const
 	std::string text;
 	for (int i = 1; i >= 0; i--)
 	{
-		if (m_hours < i * 10)
+		if (static_cast<int>(m_hours) < i * 10)
 		{
 			text.append("0");
 		}

@@ -14,6 +14,7 @@ public:
 	DateTime& operator+ (const DateTime& rhv);
 
 	void SetDateTimeInSeconds(const unsigned long long Seconds);
+	void SetDateTimeInDays(const dateDay DayAmount);
 	static const DateTime GetCurrentDateTime();
 	const unsigned long long GetDateTimeInSeconds() const;
 	const Date& GetDate() const;
